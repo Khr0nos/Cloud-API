@@ -22,7 +22,7 @@ namespace Cloud_API.Controllers {
 
         //POST api/items
         [HttpPost]
-        public IActionResult Post(Item item) {
+        public IActionResult Post([FromBody]Item item) { //TODO corregir obtenció item a insertar
             if (item == null) return BadRequest();
             if (ModelState.IsValid) {
                 _context.Items.Add(item);
