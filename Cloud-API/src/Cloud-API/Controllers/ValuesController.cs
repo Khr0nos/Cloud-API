@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cloud_API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cloud_API.Controllers {
@@ -21,7 +22,7 @@ namespace Cloud_API.Controllers {
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post([FromBody] string value) {
+        public IActionResult Post([FromBody] Item value) {
             return NoContent();
         }
 
