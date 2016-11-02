@@ -18,7 +18,8 @@ namespace Cloud_API.Controllers {
         //GET /api/items/2
         [HttpGet("{id}", Name = "GetItem")]
         public IActionResult Get(string id) {
-            var res = _context.Items.ToList().Find(i => i.Key == int.Parse(id));
+            var res = _context.Items.FirstOrDefault(i => i.Key == int.Parse(id));
+            //var res = _context.Items.ToList().Find(i => i.Key == int.Parse(id));
             if (res == default(Item)) {
                 return NotFound();
             }
@@ -42,5 +43,17 @@ namespace Cloud_API.Controllers {
 
             return NoContent();
         }
+
+        // PUT api/items/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value) { }
+
+        // PATCH api/items/5
+        [HttpPatch("{id}")]
+        public void Patch(int id, [FromBody] string value) { }
+
+        // DELETE api/items/5
+        [HttpDelete("{id}")]
+        public void Delete(int id) { }
     }
 }
