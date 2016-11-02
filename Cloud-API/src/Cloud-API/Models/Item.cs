@@ -14,7 +14,11 @@ namespace Cloud_API.Models {
             modelBuilder.Entity<Item>().HasKey(k => k.Key);
         }
 
-        public virtual DbSet<Item> Items { get; set; }
+        //public Item Find() {
+            
+        //}
+
+        public DbSet<Item> Items { get; set; }
     }
 
     public class Item {

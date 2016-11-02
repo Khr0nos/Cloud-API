@@ -21,12 +21,15 @@ namespace Cloud_API.Controllers {
         }
 
         //POST api/items
-        [HttpPost]
-        public IActionResult Post([FromBody]Item item) { //TODO corregir obtenció item a insertar
+        [HttpPost(Name = "SetItem")]
+        public IActionResult Post([FromBody]Item item) {
             if (item == null) return BadRequest();
             if (ModelState.IsValid) {
-                _context.Items.Add(item);
-                _context.SaveChanges();
+                try {
+                    _context.Items.Add(item);
+                    _context.SaveChanges();
+                } catch (Exception) {
+                }
                 return CreatedAtRoute("GetItem", new {id = item.Key}, item);
             }
 
