@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Cloud_API.Models;
@@ -17,18 +18,24 @@ namespace Cloud_API.Controllers {
         //GET /api/items/2
         [HttpGet("{id}", Name = "GetItem")]
         public IActionResult Get(string id) {
-            return Ok();
+            var res = _context.Items.ToList().Find(i => i.Key == int.Parse(id));
+            if (res == default(Item)) {
+                return NotFound();
+            }
+            return new JsonResult(res);
         }
 
         //POST api/items
-        [HttpPost(Name = "SetItem")]
+        [HttpPost(Name = "AddItem")]
         public IActionResult Post([FromBody]Item item) {
             if (item == null) return BadRequest();
             if (ModelState.IsValid) {
                 try {
                     _context.Items.Add(item);
                     _context.SaveChanges();
-                } catch (Exception) {
+                } catch (Exception ex) {
+                    Debug.WriteLine(ex.Message);
+                    return BadRequest();
                 }
                 return CreatedAtRoute("GetItem", new {id = item.Key}, item);
             }
