@@ -53,24 +53,55 @@ namespace Cloud_API.Controllers {
 
         // PUT api/items/id
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] string value)
-        {
+        public IActionResult Put(int id, [FromBody]Item value) {
+            if (value == null) return BadRequest();
             var item = _context.Items.FirstOrDefault(i => i.Key == id);
             if (item == default(Item)) return NotFound();
             if (ModelState.IsValid) {
-                item.Name = value;
-                _context.Items.Update(item);
-                return Ok();
+                try {
+                    item = value;
+                    _context.Items.Update(item);
+                    _context.SaveChanges();
+                } catch (Exception ex) {
+                    Debug.WriteLine(ex.Message);
+                    return BadRequest();
+                }
+                return NoContent();
             }
             return BadRequest();
         }
 
         // PATCH api/items/id
         [HttpPatch("{id}")]
-        public void Patch(int id, [FromBody] string value) { }
+        public IActionResult Patch(int id, [FromBody]Item value) {
+            if (value == null) return BadRequest();
+            var item = _context.Items.FirstOrDefault(i => i.Key == id);
+            if (item == default(Item)) return NotFound();
+            if (ModelState.IsValid) {
+                try {
+                    item.Name = value.Name; //todo per a Item mes complex metode aux
+                    _context.Items.Update(item);
+                    _context.SaveChanges();
+                } catch (Exception ex) {
+                    Debug.WriteLine(ex.Message);
+                    return BadRequest();
+                }
+                return NoContent();
+            }
+            return BadRequest();
+        }
 
         // DELETE api/items/id
         [HttpDelete("{id}")]
-        public void Delete(int id) { }
+        public IActionResult Delete(int id) {
+            var item = _context.Items.FirstOrDefault(i => i.Key == id);
+            if (item == default(Item)) return NotFound();
+            if (ModelState.IsValid) {
+                _context.Items.Remove(item);
+                _context.SaveChanges();
+                return NoContent();
+            }
+            return BadRequest();
+        }
     }
 }
