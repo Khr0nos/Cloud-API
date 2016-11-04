@@ -13,7 +13,7 @@ namespace Cloud_API.Models {
     }
 
     public class Item {
-        public int Key { get; set; }
+        public int Key { get; } //no cal set si la BBDD assigna la PK
         public string Name { get; set; }
     }
 }
