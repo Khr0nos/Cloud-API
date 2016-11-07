@@ -5,7 +5,7 @@ using Cloud_API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cloud_API.Controllers {
-    [Route("api/items")]
+    [Route("api/[controller]")]
     public class ItemsController : Controller {
         private ItemContext _context;
 
@@ -17,22 +17,22 @@ namespace Cloud_API.Controllers {
         [HttpGet]
         public IActionResult Get() {
             var items = _context.Items.ToList();
-            return new JsonResult(items);
+            return Json(items);
         }
 
         //GET /api/items/id
         [HttpGet("{id}", Name = "GetItem")]
         public IActionResult Get(int id) {
             var res = _context.Items.FirstOrDefault(i => i.Key == id);
-            //var res = _context.Items.ToList().Find(i => i.Key == int.Parse(id));
+            //var res = _context.Items.ToList().Find(i => i.Key == id);
             if (res == default(Item)) {
                 return NotFound();
             }
-            return new JsonResult(res);
+            return Json(res);
         }
 
         //POST api/items
-        [HttpPost(Name = "AddItem")]
+        [HttpPost]
         public IActionResult Post([FromBody]Item item) {
             if (item == null) return BadRequest();
             if (ModelState.IsValid) {
@@ -43,7 +43,7 @@ namespace Cloud_API.Controllers {
                     Debug.WriteLine(ex.Message);
                     return BadRequest();
                 }
-                return CreatedAtRoute("GetItem", new {id = item.Key}, item);
+                return CreatedAtRoute("GetItem", new { id = item.Key }, item);
             }
 
             return NoContent();
