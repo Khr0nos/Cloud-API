@@ -5,7 +5,7 @@ namespace Cloud_API.Models {
         public ItemContext(DbContextOptions<ItemContext> options) : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            base.OnModelCreating(modelBuilder);
+            //base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Item>().HasKey(k => k.Key);
         }
 
@@ -13,7 +13,7 @@ namespace Cloud_API.Models {
     }
 
     public class Item {
-        public int Key { get; } //no cal set si la BBDD assigna la PK
+        public int Key { get; set; }
         public string Name { get; set; }
     }
 }
