@@ -21,7 +21,7 @@ namespace Cloud_API.Controllers {
         }
 
         //GET /api/items/id
-        [HttpGet("{id}", Name = "GetItem")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id) {
             var res = _context.Items.FirstOrDefault(i => i.ID == id);
             if (res == default(Item)) {
