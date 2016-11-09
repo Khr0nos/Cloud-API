@@ -14,8 +14,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cloud-API", "src\Cloud-API\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{44D7D77C-AFE7-4FA7-9E6A-9EAF615D5B4F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SimpleTests", "SimpleTests\SimpleTests.xproj", "{6BA8F36D-CF25-49D1-B43F-511520A75B7D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,10 +24,6 @@ Global
 		{815A9E6F-6BF8-497E-AA03-F5A1DB48AB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{815A9E6F-6BF8-497E-AA03-F5A1DB48AB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{815A9E6F-6BF8-497E-AA03-F5A1DB48AB6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6BA8F36D-CF25-49D1-B43F-511520A75B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6BA8F36D-CF25-49D1-B43F-511520A75B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6BA8F36D-CF25-49D1-B43F-511520A75B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6BA8F36D-CF25-49D1-B43F-511520A75B7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,6 +31,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{815A9E6F-6BF8-497E-AA03-F5A1DB48AB6D} = {8D315740-7A5A-4014-9624-F697E855ACD5}
 		{44D7D77C-AFE7-4FA7-9E6A-9EAF615D5B4F} = {8D315740-7A5A-4014-9624-F697E855ACD5}
-		{6BA8F36D-CF25-49D1-B43F-511520A75B7D} = {44D7D77C-AFE7-4FA7-9E6A-9EAF615D5B4F}
 	EndGlobalSection
 EndGlobal
