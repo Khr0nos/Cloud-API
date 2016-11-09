@@ -1,10 +1,8 @@
 ﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.Kestrel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Cloud_API.Models {
+namespace Cloud_API.Models
+{
     public class ItemContext : DbContext {
         public ItemContext(DbContextOptions<ItemContext> options) : base(options) {}
 
