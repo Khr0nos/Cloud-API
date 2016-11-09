@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cloud_API.Models
-{
+namespace Cloud_API.Models {
     public class ItemContext : DbContext {
         public ItemContext(DbContextOptions<ItemContext> options) : base(options) {}
 

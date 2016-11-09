@@ -24,7 +24,6 @@ namespace Cloud_API.Controllers {
         [HttpGet("{id}", Name = "GetItem")]
         public IActionResult Get(int id) {
             var res = _context.Items.FirstOrDefault(i => i.ID == id);
-            //var res = _context.Items.ToList().Find(i => i.Key == id);
             if (res == default(Item)) {
                 return NotFound();
             }
@@ -44,7 +43,8 @@ namespace Cloud_API.Controllers {
                     Debug.WriteLine(ex.Message);
                     return BadRequest();
                 }
-                return CreatedAtRoute("GetItem", new { id = item.ID }, item);
+                return Created($"/api/items/{item.ID}", item);
+                //return CreatedAtRoute("GetItem", new { id = item.ID }, item);
             }
 
             return NoContent();
