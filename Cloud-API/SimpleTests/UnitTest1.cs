@@ -6,7 +6,9 @@ using Xunit;
 namespace SimpleTests {
     public class UnitTest1 {
         [Theory]
-        [InlineData(55, 56, 57)]
+        [InlineData(55)]
+        [InlineData(56)]
+        [InlineData(57)]
         public void GetItem(int id) {
             var req = WebRequest.Create($"http://localhost:5009/api/items/{id}");
             req.Method = "GET";
