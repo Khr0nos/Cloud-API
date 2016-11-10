@@ -4,7 +4,7 @@ using System.Net;
 using Xunit;
 
 namespace SimpleTests {
-    public class UnitTest1 {
+    public class SimpleTests {
         [Theory]
         [InlineData(55)]
         [InlineData(56)]
