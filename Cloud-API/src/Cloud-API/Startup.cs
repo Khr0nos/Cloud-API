@@ -25,8 +25,8 @@ namespace Cloud_API {
             // Add framework services.
             //services.AddDbContext<ItemContext>(
             //    options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<DevicesContext>(
-                opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<DevicesContext>(
+            //    opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
         }
 
