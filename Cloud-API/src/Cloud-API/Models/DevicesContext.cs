@@ -11,6 +11,8 @@ namespace Cloud_API.Models {
         public virtual DbSet<HistoricData> HistoricData { get; set; }
         public virtual DbSet<HistoricDevices> HistoricDevices { get; set; }
 
+        public DevicesContext(DbContextOptions<DevicesContext> options) : base(options) {}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<AuxDataType>(entity => {
                 entity.HasKey(e => e.IdauxDataType)
