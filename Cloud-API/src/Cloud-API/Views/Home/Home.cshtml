@@ -10,9 +10,9 @@
 <h2>Devices</h2>
 
 <ul>
-    @for (var i = 0; i < devices.Length; i++) {
-        <li>Name: @devices[i].DeviceName</li>
-        <li>Enabled: @devices[i].DeviceEnabled</li>
-        <li>Created at: @devices[i].DeviceCreationDate</li>
+    @foreach (var dev in devices) {
+        <li>Name: @dev.DeviceName</li>
+        <li>Enabled: @dev.DeviceEnabled</li>
+        <li>Created at: @dev.DeviceCreationDate</li>
     }
 </ul>

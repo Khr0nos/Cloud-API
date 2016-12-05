@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cloud_API.Controllers {
-    [Route("Home")]
+    [Route("[controller]")]
     public class HomeController : Controller {
         private readonly DevicesContext dbcontext;
 
