@@ -1,0 +1,18 @@
+﻿@using Cloud_API.Models;
+@model Devices
+
+@{
+    ViewBag.Title = "Devices";
+    Layout = "_Layout";
+    var devices = (Devices[])ViewData["Devices"];
+}
+
+<h2>Devices</h2>
+
+<ul>
+    @for (var i = 0; i < devices.Length; i++) {
+        <li>Name: @devices[i].DeviceName</li>
+        <li>Enabled: @devices[i].DeviceEnabled</li>
+        <li>Created at: @devices[i].DeviceCreationDate</li>
+    }
+</ul>
