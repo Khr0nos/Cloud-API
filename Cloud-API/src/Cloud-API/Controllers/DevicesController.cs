@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 // ReSharper disable FormatStringProblem
 
-namespace Cloud_API.Controllers {
+namespace Cloud_API.Controllers
+{
     [Route("api/[controller]")]
     public class DevicesController : Controller {
         private readonly DevicesContext dbcontext;
@@ -34,7 +35,19 @@ namespace Cloud_API.Controllers {
 
         // POST api/Devices
         [HttpPost]
-        public void Post([FromBody] string value) {}
+        public async Task<ActionResult> Post([FromBody]Devices nou) {
+            if (nou == null) return BadRequest();
+            if (ModelState.IsValid) {
+                var res = await dbcontext.Devices.FromSql(
+                    "spDevices_InsertDevice @p0 @p1 @p2 @p3 @p4 @p5 @p6 @p7 @p8 @p9 @p10 @p11", nou.Iddevice,
+                    nou.DeviceName, nou.IdauxDeviceType, nou.DeviceEnabled, nou.DeviceConnected,
+                    nou.DeviceNeedLogin, nou.DeviceInterval, nou.DeviceCreationDate, nou.DeviceUsername,
+                    nou.DevicePassword, nou.IddeviceProtocol, nou.DeviceAux).ToArrayAsync();
+                if (res.Length <= 0) return BadRequest();
+                return Created($"/api/Devices/{nou.Iddevice}", nou);
+            }
+            return NoContent();
+        }
 
         // PUT api/Devices/5
         [HttpPut("{id}")]
