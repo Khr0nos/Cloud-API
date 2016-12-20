@@ -11,7 +11,7 @@ namespace Cloud_API.Models {
         public bool HistDataAck { get; set; }
         public string HistDataAux { get; set; }
 
-        public virtual AuxDataType IddataTypeNavigation { get; set; }
-        public virtual Devices IddeviceNavigation { get; set; }
+        internal virtual AuxDataType IddataTypeNavigation { get; set; }
+        internal virtual Devices IddeviceNavigation { get; set; }
     }
 }

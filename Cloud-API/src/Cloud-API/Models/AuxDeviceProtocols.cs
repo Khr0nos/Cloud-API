@@ -9,6 +9,6 @@ namespace Cloud_API.Models {
         public int IddeviceProtocol { get; set; }
         public string DeviceProtocol { get; set; }
 
-        public virtual ICollection<Devices> Devices { get; set; }
+        internal virtual ICollection<Devices> Devices { get; set; }
     }
 }

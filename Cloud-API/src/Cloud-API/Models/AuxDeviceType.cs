@@ -9,6 +9,6 @@ namespace Cloud_API.Models {
         public int IdauxDeviceType { get; set; }
         public string DeviceType { get; set; }
 
-        public virtual ICollection<Devices> Devices { get; set; }
+        internal virtual ICollection<Devices> Devices { get; set; }
     }
 }

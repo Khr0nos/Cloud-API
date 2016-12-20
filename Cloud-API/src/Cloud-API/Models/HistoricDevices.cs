@@ -9,7 +9,7 @@ namespace Cloud_API.Models {
         public string HistDeviceIpaddress { get; set; }
         public string HistDeviceAux { get; set; }
 
-        public virtual Devices IddeviceNavigation { get; set; }
-        public virtual AuxDeviceActions IddeviceActionNavigation { get; set; }
+        internal virtual Devices IddeviceNavigation { get; set; }
+        internal virtual AuxDeviceActions IddeviceActionNavigation { get; set; }
     }
 }

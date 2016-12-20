@@ -10,6 +10,6 @@ namespace Cloud_API.Models {
         public int IdauxDataType { get; set; }
         public string DataType { get; set; }
 
-        public virtual ICollection<HistoricData> HistoricData { get; set; }
+        internal virtual ICollection<HistoricData> HistoricData { get; set; }
     }
 }
