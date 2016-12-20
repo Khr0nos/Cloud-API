@@ -32,7 +32,8 @@
       "version": "1.0.0-preview3-final",
       "type": "build"
     },
-    "Microsoft.AspNetCore.StaticFiles": "1.1.0"
+    "Microsoft.AspNetCore.StaticFiles": "1.1.0",
+    "NLog.Extensions.Logging": "1.0.0-*"
   },
 
   "tools": {
@@ -67,7 +68,8 @@
       "wwwroot",
       "**/*.cshtml",
       "appsettings.json",
-      "web.config"
+      "web.config",
+      "nlog.config"
     ]
   },
 
