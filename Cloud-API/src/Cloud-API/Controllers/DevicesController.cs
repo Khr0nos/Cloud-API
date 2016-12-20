@@ -2,6 +2,8 @@
 using Cloud_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NLog;
+
 // ReSharper disable FormatStringProblem
 
 namespace Cloud_API.Controllers
@@ -9,21 +11,24 @@ namespace Cloud_API.Controllers
     [Route("api/[controller]")]
     public class DevicesController : Controller {
         private readonly DevicesContext dbcontext;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public DevicesController(DevicesContext context) {
             dbcontext = context;
-        }       
+        }
 
         // GET: api/Devices
         [HttpGet]
-        public async Task<ActionResult> Get() {
-            var res = await dbcontext.Devices.FromSql("spDevices_GetAll").ToArrayAsync();
-            return Json(res);
+        public ActionResult Get() {
+            logger.Info("GET All Devices");
+            //var res = await dbcontext.Devices.FromSql("spDevices_GetAll").ToArrayAsync();
+            return Json(dbcontext.Devices);
         }
 
         // GET api/Devices/5
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(string id) {
+            logger.Info($"GET Device with id={id}");
             int num;
             if (int.TryParse(id, out num)) {
                 var res = await dbcontext.Devices.FromSql("spDevices_GetDevice @p0", id).ToArrayAsync();

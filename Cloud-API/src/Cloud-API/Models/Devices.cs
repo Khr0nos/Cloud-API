@@ -21,9 +21,9 @@ namespace Cloud_API.Models {
         public int IddeviceProtocol { get; set; }
         public string DeviceAux { get; set; }
 
-        public virtual ICollection<HistoricData> HistoricData { get; set; }
-        public virtual ICollection<HistoricDevices> HistoricDevices { get; set; }
-        public virtual AuxDeviceType IdauxDeviceTypeNavigation { get; set; }
-        public virtual AuxDeviceProtocols IddeviceProtocolNavigation { get; set; }
+        internal virtual ICollection<HistoricData> HistoricData { get; set; }
+        internal virtual ICollection<HistoricDevices> HistoricDevices { get; set; }
+        internal virtual AuxDeviceType IdauxDeviceTypeNavigation { get; set; }
+        internal virtual AuxDeviceProtocols IddeviceProtocolNavigation { get; set; }
     }
 }
