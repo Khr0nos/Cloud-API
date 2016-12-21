@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Cloud_API.Controllers {
     [Route("[controller]")]
     public class HomeController : Controller {
-        private readonly DevicesContext dbcontext;
+        private readonly DatabaseContext dbcontext;
 
-        public HomeController(DevicesContext context) {
+        public HomeController(DatabaseContext context) {
             dbcontext = context;
         }
 

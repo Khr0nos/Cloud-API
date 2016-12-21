@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Cloud_API.Models {
-    public partial class DevicesContext : DbContext {
+    public partial class DatabaseContext : DbContext {
         public virtual DbSet<AuxDataType> AuxDataType { get; set; }
         public virtual DbSet<AuxDeviceActions> AuxDeviceActions { get; set; }
         public virtual DbSet<AuxDeviceProtocols> AuxDeviceProtocols { get; set; }
@@ -11,7 +11,7 @@ namespace Cloud_API.Models {
         public virtual DbSet<HistoricData> HistoricData { get; set; }
         public virtual DbSet<HistoricDevices> HistoricDevices { get; set; }
 
-        public DevicesContext(DbContextOptions<DevicesContext> options) : base(options) {}
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<AuxDataType>(entity => {
@@ -88,17 +88,17 @@ namespace Cloud_API.Models {
 
                 entity.Property(e => e.DeviceName)
                     .IsRequired()
-                    .HasColumnType("nchar(10)");
+                    .HasColumnType("nchar(20)");
 
                 entity.Property(e => e.DeviceNeedLogin).HasDefaultValueSql("0");
 
                 entity.Property(e => e.DevicePassword)
                     .IsRequired()
-                    .HasColumnType("nchar(10)");
+                    .HasColumnType("nchar(20)");
 
                 entity.Property(e => e.DeviceUsername)
                     .IsRequired()
-                    .HasColumnType("nchar(10)");
+                    .HasColumnType("nchar(20)");
 
                 entity.Property(e => e.IdauxDeviceType).HasColumnName("IDAuxDeviceType");
 
