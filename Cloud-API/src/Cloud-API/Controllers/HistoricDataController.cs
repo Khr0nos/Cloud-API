@@ -17,6 +17,10 @@ namespace Cloud_API.Controllers {
         }
 
         // GET: api/historicdata
+        /// <summary>
+        /// Gets all HistoricData Values
+        /// </summary>
+        /// <returns>Historic Data Collection</returns>
         [HttpGet]
         public ActionResult Get() {
             logger.Info("GET All Historic Data");
@@ -24,15 +28,25 @@ namespace Cloud_API.Controllers {
         }
 
         // GET api/historicdata/5
+        /// <summary>
+        /// Gets specific HistoricData
+        /// </summary>
+        /// <param name="id">HistoricData identifier</param>
+        /// <returns>Historic Data</returns>
         [HttpGet("{id}")]
         public ActionResult Get(int id) {
-            logger.Info($"GET Device with id={id}");
+            logger.Info($"GET Data with id={id}");
             var res = db.HistoricData.Find(id);
             if (res == null) return NotFound();
             return Json(res);
         }
 
         // POST api/historicdata
+        /// <summary>
+        /// Adds new HistoricData
+        /// </summary>
+        /// <param name="nou">new HistoricData to be added</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Post([FromBody] HistoricData nou) {
             logger.Info("POST Insert new Data");
@@ -58,6 +72,12 @@ namespace Cloud_API.Controllers {
         }
 
         // PUT api/historicdata/5
+        /// <summary>
+        /// Updates existing HistoricData
+        /// </summary>
+        /// <param name="id">HistoricData identifier</param>
+        /// <param name="nou">HistoricData to be updated</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] HistoricData nou) {
             logger.Info($"PUT Update data with id={id}");
@@ -79,6 +99,11 @@ namespace Cloud_API.Controllers {
         }
 
         // DELETE api/historicdata/5
+        /// <summary>
+        /// Deletes specific HistoricData
+        /// </summary>
+        /// <param name="id">HistoricData identifier</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id) {
             logger.Info("DELETE Data");

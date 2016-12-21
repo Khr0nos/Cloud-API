@@ -10,7 +10,8 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchUrl": "api/items",
+      "launchBrowser": true,
+      "launchUrl": "swagger/ui",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -18,7 +19,7 @@
     "Cloud_API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/api/items",
+      "launchUrl": "http://localhost:5000/swagger/ui",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
