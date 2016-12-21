@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 
-// ReSharper disable FormatStringProblem
-
 namespace Cloud_API.Controllers {
     [Route("api/[controller]")]
     public class devicesController : Controller {
@@ -43,7 +41,7 @@ namespace Cloud_API.Controllers {
 
         // POST api/Devices
         [HttpPost]
-        public ActionResult Post([FromBody]Devices nou) {
+        public ActionResult Post([FromBody] Devices nou) {
             logger.Info("POST Insert new Device");
             if (!ModelState.IsValid) return BadRequest(ModelState);
             //var res = await db.Devices.FromSql(
@@ -57,26 +55,61 @@ namespace Cloud_API.Controllers {
             try {
                 db.SaveChanges();
             } catch (DbUpdateException ex) {
-                logger.Warn(ex.Message);
+                logger.Warn(ex, ex.Message);
                 if (DeviceExists(nou.Iddevice)) {
-                    return StatusCode((int) HttpStatusCode.Conflict);
+                    return StatusCode((int) HttpStatusCode.Conflict, nou);
                 }
             } catch (Exception ex) {
-                logger.Error(ex, ex.Message);
+                logger.Trace(ex);
+                logger.Error(ex.Message);
                 return BadRequest(nou);
             }
-            return Created($"/api/Devices/{nou.Iddevice}", nou);
+
+            logger.Info("Device created correctly");
+            return Created($"/api/devices/{nou.Iddevice}", nou);
         }
 
         // PUT api/Devices/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value) {
-            
+        public ActionResult Put(int id, [FromBody] Devices nou) {
+            logger.Info($"PUT Update device with id={id}");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (id != nou.Iddevice) return BadRequest(nou);
+
+            //db.Entry(nou).State = EntityState.Modified;
+            db.Devices.Update(nou);
+
+            try {
+                db.SaveChanges();
+            } catch (DbUpdateConcurrencyException ex) {
+                logger.Warn(ex, ex.Message);
+                if (!DeviceExists(id)) return NotFound();
+            } catch (Exception ex) {
+                logger.Trace(ex);
+                logger.Error(ex.Message);
+            }
+            return NoContent();
         }
 
         // DELETE api/Devices/5
         [HttpDelete("{id}")]
-        public void Delete(int id) {}
+        public ActionResult Delete(int id) {
+            logger.Info("DELETE Device");
+            var res = db.Devices.Find(id);
+            if (res == null) return NotFound();
+
+            db.Devices.Remove(res);
+
+            try {
+                db.SaveChanges();
+            } catch (Exception ex) {
+                logger.Trace(ex);
+                logger.Error(ex.Message);
+            }
+
+            logger.Info($"Device with id={id} deleted");
+            return Ok(res);
+        }
 
         #region Auxiliar
 
