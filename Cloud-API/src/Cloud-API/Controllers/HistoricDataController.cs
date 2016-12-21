@@ -8,51 +8,43 @@ using NLog;
 
 namespace Cloud_API.Controllers {
     [Route("api/[controller]")]
-    public class devicesController : Controller {
+    public class historicdataController : Controller {
         private readonly DatabaseContext db;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public devicesController(DatabaseContext context) {
+        public historicdataController(DatabaseContext context) {
             db = context;
         }
 
-        // GET: api/devices
+        // GET: api/historicdata
         [HttpGet]
         public ActionResult Get() {
-            logger.Info("GET All devices");
-            //var res = await dbcontext.devices.FromSql("spdevices_GetAll").ToArrayAsync();
-            return Json(db.Devices);
+            logger.Info("GET All Historic Data");
+            return Json(db.HistoricData);
         }
 
-        // GET api/devices/5
+        // GET api/historicdata/5
         [HttpGet("{id}")]
         public ActionResult Get(int id) {
             logger.Info($"GET Device with id={id}");
-            //var res = await db.devices.FromSql("spdevices_GetDevice @p0", id).ToArrayAsync();
-            //if (res.Length == 0) return NotFound();
-            var res = db.Devices.Find(id);
+            var res = db.HistoricData.Find(id);
             if (res == null) return NotFound();
             return Json(res);
         }
 
-        // POST api/devices
+        // POST api/historicdata
         [HttpPost]
-        public ActionResult Post([FromBody] Devices nou) {
-            logger.Info("POST Insert new Device");
+        public ActionResult Post([FromBody] HistoricData nou) {
+            logger.Info("POST Insert new Data");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            //var res = await db.devices.FromSql(
-            //    "spdevices_InsertDevice @p0 @p1 @p2 @p3 @p4 @p5 @p6 @p7 @p8 @p9 @p10 @p11", nou.Iddevice,
-            //    nou.DeviceName, nou.IdauxDeviceType, nou.DeviceEnabled, nou.DeviceConnected,
-            //    nou.DeviceNeedLogin, nou.DeviceInterval, nou.DeviceCreationDate, nou.DeviceUsername,
-            //    nou.DevicePassword, nou.IddeviceProtocol, nou.DeviceAux).ToArrayAsync();
 
-            db.Devices.Add(nou);
+            db.HistoricData.Add(nou);
 
             try {
                 db.SaveChanges();
             } catch (DbUpdateException ex) {
                 logger.Warn(ex, ex.Message);
-                if (DeviceExists(nou.Iddevice)) {
+                if (DataExists(nou.IdhistoricData)) {
                     return StatusCode((int) HttpStatusCode.Conflict, nou);
                 }
             } catch (Exception ex) {
@@ -61,25 +53,24 @@ namespace Cloud_API.Controllers {
                 return BadRequest(nou);
             }
 
-            logger.Info("Device created correctly");
-            return Created($"/api/devices/{nou.Iddevice}", nou);
+            logger.Info("Data added correctly");
+            return Created($"/api/historicdata/{nou.IdhistoricData}", nou);
         }
 
-        // PUT api/devices/5
+        // PUT api/historicdata/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Devices nou) {
-            logger.Info($"PUT Update device with id={id}");
+        public ActionResult Put(int id, [FromBody] HistoricData nou) {
+            logger.Info($"PUT Update data with id={id}");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (id != nou.Iddevice) return BadRequest(nou);
+            if (id != nou.IdhistoricData) return BadRequest(nou);
 
-            //db.Entry(nou).State = EntityState.Modified;
-            db.Devices.Update(nou);
+            db.HistoricData.Update(nou);
 
             try {
                 db.SaveChanges();
             } catch (DbUpdateConcurrencyException ex) {
                 logger.Warn(ex, ex.Message);
-                if (!DeviceExists(id)) return NotFound();
+                if (!DataExists(id)) return NotFound();
             } catch (Exception ex) {
                 logger.Trace(ex);
                 logger.Error(ex.Message);
@@ -87,14 +78,14 @@ namespace Cloud_API.Controllers {
             return NoContent();
         }
 
-        // DELETE api/devices/5
+        // DELETE api/historicdata/5
         [HttpDelete("{id}")]
         public ActionResult Delete(int id) {
-            logger.Info("DELETE Device");
-            var res = db.Devices.Find(id);
+            logger.Info("DELETE Data");
+            var res = db.HistoricData.Find(id);
             if (res == null) return NotFound();
 
-            db.Devices.Remove(res);
+            db.HistoricData.Remove(res);
 
             try {
                 db.SaveChanges();
@@ -103,14 +94,14 @@ namespace Cloud_API.Controllers {
                 logger.Error(ex.Message);
             }
 
-            logger.Info($"Device with id={id} deleted");
+            logger.Info($"Data with id={id} deleted");
             return Ok(res);
         }
 
         #region Auxiliar
 
-        private bool DeviceExists(int iddevice) {
-            return db.Devices.Any(e => e.Iddevice == iddevice);
+        private bool DataExists(int iddata) {
+            return db.HistoricData.Any(e => e.IdhistoricData == iddata);
         }
 
         #endregion

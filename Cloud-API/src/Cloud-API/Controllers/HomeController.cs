@@ -6,16 +6,16 @@ using Microsoft.EntityFrameworkCore;
 namespace Cloud_API.Controllers {
     [Route("[controller]")]
     public class HomeController : Controller {
-        private readonly DatabaseContext dbcontext;
+        //private readonly DatabaseContext db;
 
-        public HomeController(DatabaseContext context) {
-            dbcontext = context;
-        }
+        //public HomeController(DatabaseContext context) {
+        //    db = context;
+        //}
 
         // GET: /Home
-        public async Task<ActionResult> Home() {
-            var res = await dbcontext.Devices.FromSql("spDevices_GetAll").ToArrayAsync();
-            ViewData["Devices"] = res;
+        public ActionResult Home() {
+            //var res = await db.Devices.FromSql("spDevices_GetAll").ToArrayAsync();
+            //ViewData["Devices"] = res;
             return View();
         }
     }
