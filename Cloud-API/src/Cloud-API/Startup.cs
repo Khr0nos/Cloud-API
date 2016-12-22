@@ -28,7 +28,7 @@ namespace Cloud_API {
             // Add framework services.
             //services.AddRouting();
             services.AddDbContext<DatabaseContext>(
-                opt => opt.UseSqlServer(Configuration.GetConnectionString("Home")));
+                opt => opt.UseSqlServer(Configuration.GetConnectionString("Azure")));
             services.AddMvc();
 
             services.AddSwaggerGen();
