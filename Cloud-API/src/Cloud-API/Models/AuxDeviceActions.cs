@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cloud_API.Models {
     public partial class AuxDeviceActions {
@@ -6,6 +7,7 @@ namespace Cloud_API.Models {
             HistoricDevices = new HashSet<HistoricDevices>();
         }
 
+        [Required]
         public int IdauxDeviceAction { get; set; }
         public string DeviceAction { get; set; }
 

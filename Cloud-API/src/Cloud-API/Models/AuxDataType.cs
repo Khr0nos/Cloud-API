@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cloud_API.Models {
     public partial class AuxDataType {
@@ -7,6 +7,7 @@ namespace Cloud_API.Models {
             HistoricData = new HashSet<HistoricData>();
         }
 
+        [Required]
         public int IdauxDataType { get; set; }
         public string DataType { get; set; }
 

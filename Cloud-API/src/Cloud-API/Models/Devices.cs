@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cloud_API.Models {
     public partial class Devices {
@@ -8,6 +9,7 @@ namespace Cloud_API.Models {
             HistoricDevices = new HashSet<HistoricDevices>();
         }
 
+        [Required]
         public int Iddevice { get; set; }
         public string DeviceName { get; set; }
         public int IdauxDeviceType { get; set; }

@@ -38,7 +38,7 @@ namespace Cloud_API {
                     Title = "IoT Cloud API",
                     Description = "ASP.NET Core Web service using a REST API",
                     TermsOfService = "None",
-                    Contact = new Contact { Name = "Xavi Garcia", Email = "", Url = "" },
+                    Contact = new Contact { Name = "Xavi Garcia", Email = "xgarcia@mcr.es", Url = "" },
                     License = new License { Name = "" }
                 });
                 var basePath = PlatformServices.Default.Application.ApplicationBasePath;
