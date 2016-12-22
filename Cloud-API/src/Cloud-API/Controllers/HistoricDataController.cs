@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using NLog;
 
 namespace Cloud_API.Controllers {
+    /// <summary>
+    /// API entry point to manage Historic Data
+    /// </summary>
     [Route("api/[controller]")]
     public class historicdataController : Controller {
         private readonly DatabaseContext db;

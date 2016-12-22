@@ -62,7 +62,7 @@ namespace Cloud_API {
             app.UseStaticFiles();   
             app.UseMvcWithDefaultRoute();
             app.UseSwagger();
-            app.UseSwaggerUi();
+            app.UseSwaggerUi("help");
         }
     }
 }
