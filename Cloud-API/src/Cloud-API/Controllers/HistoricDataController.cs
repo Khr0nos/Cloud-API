@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Cloud_API.Models;
@@ -23,8 +24,11 @@ namespace Cloud_API.Controllers {
         /// <summary>
         /// Gets all HistoricData Values
         /// </summary>
+        /// <remarks>Returns a JSON array of Historic Data items</remarks>
         /// <returns>Historic Data Collection</returns>
+        /// <response code="200">Returns all Historic Data items</response>
         [HttpGet]
+        [ProducesResponseType(typeof(HistoricData), 200)]
         public ActionResult Get() {
             logger.Info("GET All Historic Data");
             return Json(db.HistoricData);
@@ -36,7 +40,11 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <param name="id">HistoricData identifier</param>
         /// <returns>Historic Data</returns>
+        /// <response code="200">Returns selected Historic Data item</response>
+        /// <response code="404">Historic Data item not found</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(HistoricData),200)]
+        [ProducesResponseType(404)]
         public ActionResult Get(int id) {
             logger.Info($"GET Data with id={id}");
             var res = db.HistoricData.Find(id);
@@ -50,10 +58,19 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <param name="nou">new HistoricData to be added</param>
         /// <returns></returns>
+        /// <response code="201">Returns newly created item</response>
+        /// <response code="400">Data error</response>
+        /// <response code="409">Conflict, already existing item</response>
         [HttpPost]
+        [ProducesResponseType(typeof(HistoricData), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(HistoricData), 409)]
         public ActionResult Post([FromBody] HistoricData nou) {
             logger.Info("POST Insert new Data");
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            //var id = db.HistoricData.Last().IdhistoricData;
+            //nou.IdhistoricData = id+1;
 
             db.HistoricData.Add(nou);
 
@@ -82,6 +99,9 @@ namespace Cloud_API.Controllers {
         /// <param name="nou">HistoricData to be updated</param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
         public ActionResult Put(int id, [FromBody] HistoricData nou) {
             logger.Info($"PUT Update data with id={id}");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -108,6 +128,8 @@ namespace Cloud_API.Controllers {
         /// <param name="id">HistoricData identifier</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(HistoricData), 200)]
+        [ProducesResponseType(404)]
         public ActionResult Delete(int id) {
             logger.Info("DELETE Data");
             var res = db.HistoricData.Find(id);
