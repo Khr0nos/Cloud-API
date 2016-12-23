@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore.Scaffolding.Metadata.Internal;
 
 namespace Cloud_API.Models {
     public partial class HistoricData {

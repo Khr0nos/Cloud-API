@@ -1,0 +1,55 @@
+Exemple:
+autorest -CodeGenerator CSharp -Modeler Swagger -Input http://localhost:5000/swagger/v1/swagger.json -Namespace CloudAPI.Rest.Client -ClientName CloudClient -Header NONE
+
+Microsoft (R) AutoRest 0.17.0.0
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Usage: autorest -Input <value> [-AddCredentials <value>] [-ClientName <value>] [-CodeGenerator <value>] [-CodeGenSettings <value>] [-Header <value>] [-Modeler <value>] [-ModelsName <value>] [-Namespace <value>] [-OutputDirectory <value>] [-OutputFileName <value>] [-PackageName <value>] [-PackageVersion <value>] [-PayloadFlatteningThreshold <value>] [-ValidationLevel <value>] 
+
+Parameters:
+  -AddCredentials: If true, the generated client includes a ServiceClientCredentials property and constructor parameter. Authentication behaviors are implemented by extending the ServiceClientCredentials type.
+  -ClientName: Name to use for the generated client type. By default, uses the value of the 'Title' field from the Swagger input. Aliases: -name
+  -CodeGenerator: The code generator language. If not specified, defaults to CSharp. Aliases: -g
+  -CodeGenSettings: The path for a json file containing code generation settings. Aliases: -cgs
+  -Header: Text to include as a header comment in generated files. Use NONE to suppress the default header. Aliases: -header
+  -Input: The location of the input specification. Aliases: -i, -input
+  -Modeler: The Modeler to use on the input. If not specified, defaults to Swagger. Aliases: -m
+  -ModelsName: Name to use for the generated client models namespace and folder name. Not supported by all code generators. Aliases: -mname
+  -Namespace: The namespace to use for generated code. Aliases: -n
+  -OutputDirectory: The location for generated files. If not specified, uses "Generated" as the default. Aliases: -o, -output
+  -OutputFileName: If set, will cause generated code to be output to a single file. Not supported by all code generators.
+  -PackageName: Package name of then generated code package. Should be then names wanted for the package in then package manager. Aliases: -pn
+  -PackageVersion: Package version of then generated code package. Should be then version wanted for the package in then package manager. Aliases: -pv
+  -PayloadFlatteningThreshold: The maximum number of properties in the request body. If the number of properties in the request body is less than or equal to this value, these properties will be represented as method arguments. Aliases: -ft
+  -ValidationLevel: The input validation severity level that will prevent code generation Aliases: -vl, -validation
+
+
+Code Generators:
+  -Azure.CSharp: Azure specific C# code generator.
+  -Azure.Java: Azure specific Java code generator.
+  -Azure.Java.Fluent: Azure specific Java fluent code generator.
+  -Azure.NodeJS: Azure specific NodeJS code generator.
+  -Azure.Python: Azure specific Python code generator.
+  -Azure.Ruby: Azure specific Ruby code generator.
+  -AzureResourceSchema: Azure Resource Schema generator
+  -CSharp: Generic C# code generator.
+  -Java: Generic Java code generator.
+  -NodeJS: Generic NodeJS code generator.
+  -Python: Generic Python code generator.
+  -Ruby: Generic Ruby code generator.
+
+
+Examples:
+  Generate C# client in MyNamespace from swagger.json input:
+  >AutoRest.exe -Namespace MyNamespace -Input swagger.json
+
+  Generate C# client in MyNamespace including custom header from swagger.json input:
+  >AutoRest.exe -Namespace MyNamespace -Header "Copyright Contoso Ltd" -Input swagger.json
+
+  Generate C# client with a credentials property in MyNamespace from swagger.json input:
+  >AutoRest.exe -AddCredentials true -Namespace MyNamespace -CodeGenerator CSharp -Modeler Swagger -Input swagger.json
+
+  Generate C# client in MyNamespace with custom Models name from swagger.json input:
+  >AutoRest.exe -Namespace MyNamespace -ModelsName MyModels -CodeGenerator CSharp -Modeler Swagger -Input swagger.json
+
+
