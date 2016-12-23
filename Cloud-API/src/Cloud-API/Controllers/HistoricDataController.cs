@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Cloud_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using NLog;
 
 namespace Cloud_API.Controllers {
@@ -27,7 +29,7 @@ namespace Cloud_API.Controllers {
         /// <returns>Historic Data Collection</returns>
         /// <response code="200">Returns all Historic Data items</response>
         [HttpGet]
-        [ProducesResponseType(typeof(HistoricData), 200)]
+        [ProducesResponseType(typeof(List<HistoricData>), 200)]
         public ActionResult Get() {
             logger.Info("GET All Historic Data");
             return Json(db.HistoricData);
@@ -63,13 +65,22 @@ namespace Cloud_API.Controllers {
         [HttpPost]
         [ProducesResponseType(typeof(HistoricData), 201)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(typeof(HistoricData), 409)]
+        [ProducesResponseType(typeof(JObject), 409)]
         public ActionResult Post([FromBody] HistoricData nou) {
             logger.Info("POST Insert new Data");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            //var id = db.HistoricData.Last().IdhistoricData;
-            //nou.IdhistoricData = id+1;
+            if (!db.AuxDeviceType.Any(dev => nou.Iddevice == dev.IdauxDeviceType)) {
+                return StatusCode((int) HttpStatusCode.Conflict, new JObject { ["Device type not found"] = nou.Iddevice });
+            }
+
+            if (!db.AuxDataType.Any(dev => nou.IddataType == dev.IdauxDataType)) {
+                return StatusCode((int)HttpStatusCode.Conflict, new JObject { ["Data type not found"] = nou.IddataType});
+            }
+
+            var id = db.HistoricData.Last().IdhistoricData;
+            nou.IdhistoricData = id + 1;
+            nou.HistDataDate = DateTime.Now;
 
             db.HistoricData.Add(nou);
 
@@ -78,7 +89,7 @@ namespace Cloud_API.Controllers {
             } catch (DbUpdateException ex) {
                 logger.Warn(ex, ex.Message);
                 if (DataExists(nou.IdhistoricData)) {
-                    return StatusCode((int) HttpStatusCode.Conflict, nou);
+                    return StatusCode((int) HttpStatusCode.Conflict, new JObject { ["Data already created"] = nou.IdhistoricData});
                 }
             } catch (Exception ex) {
                 logger.Trace(ex);
