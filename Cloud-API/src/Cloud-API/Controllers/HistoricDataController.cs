@@ -65,17 +65,17 @@ namespace Cloud_API.Controllers {
         [HttpPost]
         [ProducesResponseType(typeof(HistoricData), 201)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(typeof(JObject), 409)]
+        [ProducesResponseType(409)]
         public ActionResult Post([FromBody] HistoricData nou) {
             logger.Info("POST Insert new Data");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             if (!db.AuxDeviceType.Any(dev => nou.Iddevice == dev.IdauxDeviceType)) {
-                return StatusCode((int) HttpStatusCode.Conflict, new JObject { ["Device type not found"] = nou.Iddevice });
+                return BadRequest(new JObject {["Device type not found"] = nou.Iddevice});
             }
 
             if (!db.AuxDataType.Any(dev => nou.IddataType == dev.IdauxDataType)) {
-                return StatusCode((int)HttpStatusCode.Conflict, new JObject { ["Data type not found"] = nou.IddataType});
+                return BadRequest(new JObject { ["Data type not found"] = nou.IddataType});
             }
 
             var id = db.HistoricData.Last().IdhistoricData;
@@ -89,7 +89,7 @@ namespace Cloud_API.Controllers {
             } catch (DbUpdateException ex) {
                 logger.Warn(ex, ex.Message);
                 if (DataExists(nou.IdhistoricData)) {
-                    return StatusCode((int) HttpStatusCode.Conflict, new JObject { ["Data already created"] = nou.IdhistoricData});
+                    return StatusCode((int) HttpStatusCode.Conflict, new JObject { ["Data already existing"] = nou.IdhistoricData});
                 }
             } catch (Exception ex) {
                 logger.Trace(ex);
