@@ -35,7 +35,8 @@
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
     "NLog.Extensions.Logging": "1.0.0-*",
     "Swashbuckle": "6.0.0-beta902",
-    "AutoRest": "0.17.3"
+    "AutoRest": "0.17.3",
+    "Microsoft.Rest.ClientRuntime": "2.3.4"
   },
 
   "tools": {

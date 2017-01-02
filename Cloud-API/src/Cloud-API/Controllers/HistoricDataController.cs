@@ -29,7 +29,7 @@ namespace Cloud_API.Controllers {
         /// <returns>Historic Data Collection</returns>
         /// <response code="200">Returns all Historic Data items</response>
         [HttpGet]
-        [ProducesResponseType(typeof(List<HistoricData>), 200)]
+        [ProducesResponseType(typeof(IList<HistoricData>), 200)]
         public ActionResult Get() {
             logger.Info("GET All Historic Data");
             return Json(db.HistoricData);
