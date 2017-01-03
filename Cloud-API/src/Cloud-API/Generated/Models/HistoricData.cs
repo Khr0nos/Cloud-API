@@ -1,25 +1,20 @@
 
-
-namespace CloudAPI.Rest.Client.Models {
+namespace CloudAPI.Rest.Client.Models
+{
     using System.Linq;
 
-    public partial class HistoricData {
+    public partial class HistoricData
+    {
         /// <summary>
         /// Initializes a new instance of the HistoricData class.
         /// </summary>
-        public HistoricData() {}
+        public HistoricData() { }
 
         /// <summary>
         /// Initializes a new instance of the HistoricData class.
         /// </summary>
-        public HistoricData(int iddevice,
-            string histDataValue,
-            int iddataType,
-            int? idhistoricData = default(int?),
-            System.DateTime? histDataDate = default(System.DateTime?),
-            bool? histDataToDevice = default(bool?),
-            bool? histDataAck = default(bool?),
-            string histDataAux = default(string)) {
+        public HistoricData(int iddevice, string histDataValue, int iddataType, int? idhistoricData = default(int?), System.DateTime? histDataDate = default(System.DateTime?), bool? histDataToDevice = default(bool?), bool? histDataAck = default(bool?), string histDataAux = default(string))
+        {
             IdhistoricData = idhistoricData;
             Iddevice = iddevice;
             HistDataDate = histDataDate;
@@ -76,10 +71,11 @@ namespace CloudAPI.Rest.Client.Models {
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown if validation fails
         /// </exception>
-        public virtual void Validate() {
-            if (HistDataValue == null) {
-                throw new Microsoft.Rest.ValidationException(Microsoft.Rest.ValidationRules.CannotBeNull,
-                    "HistDataValue");
+        public virtual void Validate()
+        {
+            if (HistDataValue == null)
+            {
+                throw new Microsoft.Rest.ValidationException(Microsoft.Rest.ValidationRules.CannotBeNull, "HistDataValue");
             }
         }
     }

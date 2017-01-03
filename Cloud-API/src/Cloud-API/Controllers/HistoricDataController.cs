@@ -64,8 +64,8 @@ namespace Cloud_API.Controllers {
         /// <response code="409">Conflict, already existing item</response>
         [HttpPost]
         [ProducesResponseType(typeof(HistoricData), 201)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(409)]
+        [ProducesResponseType(typeof(JObject), 400)]
+        [ProducesResponseType(typeof(JObject), 409)]
         public ActionResult Post([FromBody] HistoricData nou) {
             logger.Info("POST Insert new Data");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -94,7 +94,7 @@ namespace Cloud_API.Controllers {
             } catch (Exception ex) {
                 logger.Trace(ex);
                 logger.Error(ex.Message);
-                return BadRequest(nou);
+                return BadRequest();
             }
 
             logger.Info("Data added correctly");
