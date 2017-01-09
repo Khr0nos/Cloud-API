@@ -45,11 +45,11 @@ namespace Cloud_API.Controllers {
         /// <response code="404">Historic Data item not found</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(HistoricData),200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(JObject), 404)]
         public ActionResult Get(int id) {
             logger.Info($"GET Data with id={id}");
             var res = db.HistoricData.Find(id);
-            if (res == null) return NotFound();
+            if (res == null) return NotFound(new JObject { ["Data not found by id:"] = id });
             return Json(res);
         }
 
@@ -110,12 +110,12 @@ namespace Cloud_API.Controllers {
         /// <returns></returns>
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(JObject), 404)]
+        [ProducesResponseType(typeof(JObject), 400)]
         public ActionResult Put(int id, [FromBody] HistoricData nou) {
             logger.Info($"PUT Update data with id={id}");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (id != nou.IdhistoricData) return BadRequest(nou);
+            if (id != nou.IdhistoricData) return BadRequest(new JObject { ["ID from body different from URL parameter"] = nou.IdhistoricData });
 
             db.HistoricData.Update(nou);
 
@@ -123,7 +123,7 @@ namespace Cloud_API.Controllers {
                 db.SaveChanges();
             } catch (DbUpdateConcurrencyException ex) {
                 logger.Warn(ex, ex.Message);
-                if (!DataExists(id)) return NotFound();
+                if (!DataExists(id)) return NotFound(new JObject { ["Data not found by id:"] = id });
             } catch (Exception ex) {
                 logger.Trace(ex);
                 logger.Error(ex.Message);
@@ -139,11 +139,11 @@ namespace Cloud_API.Controllers {
         /// <returns></returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(HistoricData), 200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(JObject), 404)]
         public ActionResult Delete(int id) {
             logger.Info("DELETE Data");
             var res = db.HistoricData.Find(id);
-            if (res == null) return NotFound();
+            if (res == null) return NotFound(new JObject { ["Data not found by id:"] = id });
 
             db.HistoricData.Remove(res);
 
