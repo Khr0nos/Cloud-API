@@ -64,7 +64,7 @@ namespace CloudAPI.Rest.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        System.Threading.Tasks.Task<Microsoft.Rest.HttpOperationResponse<HistoricData>> ApiHistoricdataByIdGetWithHttpMessagesAsync(int id, System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> customHeaders = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Microsoft.Rest.HttpOperationResponse<object>> ApiHistoricdataByIdGetWithHttpMessagesAsync(int id, System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> customHeaders = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Updates existing HistoricData
@@ -81,7 +81,7 @@ namespace CloudAPI.Rest.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        System.Threading.Tasks.Task<Microsoft.Rest.HttpOperationResponse> ApiHistoricdataByIdPutWithHttpMessagesAsync(int id, HistoricData nou = default(HistoricData), System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> customHeaders = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Microsoft.Rest.HttpOperationResponse<object>> ApiHistoricdataByIdPutWithHttpMessagesAsync(int id, HistoricData nou = default(HistoricData), System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> customHeaders = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Deletes specific HistoricData
@@ -95,7 +95,7 @@ namespace CloudAPI.Rest.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        System.Threading.Tasks.Task<Microsoft.Rest.HttpOperationResponse<HistoricData>> ApiHistoricdataByIdDeleteWithHttpMessagesAsync(int id, System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> customHeaders = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Microsoft.Rest.HttpOperationResponse<object>> ApiHistoricdataByIdDeleteWithHttpMessagesAsync(int id, System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> customHeaders = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 }
