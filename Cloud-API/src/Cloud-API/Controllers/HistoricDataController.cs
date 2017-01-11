@@ -70,8 +70,13 @@ namespace Cloud_API.Controllers {
             logger.Info("POST Insert new Data");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (!db.AuxDeviceType.Any(dev => nou.Iddevice == dev.IdauxDeviceType)) {
-                return BadRequest(new JObject {["Device type not found"] = nou.Iddevice});
+            var device = db.Devices.Find(nou.Iddevice);
+            if (device == null) {
+                return BadRequest(new JObject {["Device not found"] = nou.Iddevice});
+            }
+
+            if (!device.DeviceEnabled) {
+                return BadRequest(new JObject { ["Device not enabled"] = nou.Iddevice });
             }
 
             if (!db.AuxDataType.Any(dev => nou.IddataType == dev.IdauxDataType)) {
