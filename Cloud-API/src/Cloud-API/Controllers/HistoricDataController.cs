@@ -30,9 +30,10 @@ namespace Cloud_API.Controllers {
         /// <response code="200">Returns all Historic Data items</response>
         [HttpGet]
         [ProducesResponseType(typeof(IList<HistoricData>), 200)]
-        public ActionResult Get() {
+        public IActionResult Get() {
             logger.Info("GET All Historic Data");
-            return Json(db.HistoricData);
+            return Ok(db.HistoricData);
+            //return Json(db.HistoricData);
         }
 
         // GET api/historicdata/5
@@ -101,6 +102,8 @@ namespace Cloud_API.Controllers {
                 logger.Error(ex.Message);
                 return BadRequest();
             }
+
+            //Return OK amb comanda de resposta del server
 
             logger.Info("Data added correctly");
             return Created($"/api/historicdata/{nou.IdhistoricData}", nou);
