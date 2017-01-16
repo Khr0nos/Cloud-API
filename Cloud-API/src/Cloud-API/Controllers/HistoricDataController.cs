@@ -32,7 +32,7 @@ namespace Cloud_API.Controllers {
         [ProducesResponseType(typeof(IList<HistoricData>), 200)]
         public IActionResult Get() {
             logger.Info("GET All Historic Data");
-            return Ok(db.HistoricData);
+            return Ok(db.HistoricData);     //per defecte retorna JSON
             //return Json(db.HistoricData);
         }
 
@@ -47,11 +47,11 @@ namespace Cloud_API.Controllers {
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(HistoricData),200)]
         [ProducesResponseType(typeof(JObject), 404)]
-        public ActionResult Get(int id) {
+        public IActionResult Get(int id) {
             logger.Info($"GET Data with id={id}");
             var res = db.HistoricData.Find(id);
             if (res == null) return NotFound(new JObject { ["Data not found by id:"] = id });
-            return Json(res);
+            return Ok(res);
         }
 
         // POST api/historicdata
@@ -67,7 +67,7 @@ namespace Cloud_API.Controllers {
         [ProducesResponseType(typeof(HistoricData), 201)]
         [ProducesResponseType(typeof(JObject), 400)]
         [ProducesResponseType(typeof(JObject), 409)]
-        public ActionResult Post([FromBody] HistoricData nou) {
+        public IActionResult Post([FromBody] HistoricData nou) {
             logger.Info("POST Insert new Data");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -120,7 +120,7 @@ namespace Cloud_API.Controllers {
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(JObject), 404)]
         [ProducesResponseType(typeof(JObject), 400)]
-        public ActionResult Put(int id, [FromBody] HistoricData nou) {
+        public IActionResult Put(int id, [FromBody] HistoricData nou) {
             logger.Info($"PUT Update data with id={id}");
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (id != nou.IdhistoricData) return BadRequest(new JObject { ["ID from body different from URL parameter"] = nou.IdhistoricData });
@@ -148,7 +148,7 @@ namespace Cloud_API.Controllers {
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(HistoricData), 200)]
         [ProducesResponseType(typeof(JObject), 404)]
-        public ActionResult Delete(int id) {
+        public IActionResult Delete(int id) {
             logger.Info("DELETE Data");
             var res = db.HistoricData.Find(id);
             if (res == null) return NotFound(new JObject { ["Data not found by id:"] = id });
