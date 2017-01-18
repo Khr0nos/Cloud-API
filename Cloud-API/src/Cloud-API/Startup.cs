@@ -57,7 +57,7 @@ namespace Cloud_API {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             env.ConfigureNLog("nlog.config");
 
             app.UseStaticFiles();   
