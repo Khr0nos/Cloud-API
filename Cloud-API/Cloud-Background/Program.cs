@@ -1,12 +1,23 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 
 namespace Cloud_Background {
-    class Program {
-        static void Main(string[] args) {
-            while (true) {
-                Console.WriteLine($"test data now: {DateTime.Now}");
-                Thread.Sleep(2000);
+    public class Program {
+        private static DatabaseContext db;
+
+        public static void Main(string[] args) {
+            db = new DatabaseContext();
+            //var query = from d in db.Devices select d.IDDevice;
+
+            var data = db.HistoricData.OrderByDescending(d => d.IDHistoricData)
+                .First(d => d.IDDevice == 2);
+
+            Console.WriteLine(DateTime.Now);
+            Console.WriteLine($"last with id: {data.IDDevice} {data.HistDataDate}");
+            Console.WriteLine();
+            foreach (var d in db.HistoricData) {
+                Console.WriteLine($"id: {d.IDDevice} date: {d.HistDataDate}");
             }
         }
     }
