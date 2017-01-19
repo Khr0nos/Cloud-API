@@ -2,12 +2,14 @@
 using Cloud_API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using NLog.Extensions.Logging;
+using NLog.Web;
 using Swashbuckle.Swagger.Model;
 
 namespace Cloud_API {
@@ -31,6 +33,8 @@ namespace Cloud_API {
                 opt => opt.UseSqlServer(Configuration.GetConnectionString("Azure")));
             services.AddMvc()
                 .AddXmlSerializerFormatters();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(opt => {
@@ -59,6 +63,7 @@ namespace Cloud_API {
             }
             
             env.ConfigureNLog("nlog.config");
+            app.AddNLogWeb();
 
             app.UseStaticFiles();   
             app.UseMvcWithDefaultRoute();
