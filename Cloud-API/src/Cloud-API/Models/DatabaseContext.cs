@@ -168,7 +168,6 @@ namespace Cloud_API.Models {
                     .HasDefaultValueSql("getdate()");
 
                 entity.Property(e => e.HistDeviceIpaddress)
-                    .IsRequired()
                     .HasColumnName("HistDeviceIPaddress")
                     .HasMaxLength(16);
 
