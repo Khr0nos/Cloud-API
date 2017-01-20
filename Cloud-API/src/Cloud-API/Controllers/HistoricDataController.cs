@@ -83,16 +83,10 @@ namespace Cloud_API.Controllers {
             if (!db.AuxDataType.Any(dev => nou.IddataType == dev.IdauxDataType)) {
                 return BadRequest(new JObject { ["Data type not found"] = nou.IddataType});
             }
-
-            if (!device.DeviceConnected) {
-                //device.DeviceConnected = true;
-                //db.Devices.Update(device);
-                var dev = db.Devices.Attach(device);  //update nomes DeviceConnected del dispositiu
-                dev.Entity.DeviceConnected = true;
-            }
-
-            var id = db.HistoricData.Last().IdhistoricData;
-            nou.IdhistoricData = id + 1;
+            
+            var lastData = db.HistoricData.LastOrDefault();
+            if (lastData == default(HistoricData)) nou.IdhistoricData = 1;
+            else nou.IdhistoricData = lastData.IdhistoricData + 1;
             nou.HistDataDate = DateTime.Now;
             db.HistoricData.Add(nou);
 
@@ -108,6 +102,10 @@ namespace Cloud_API.Controllers {
                 logger.Trace(ex);
                 logger.Error(ex.Message);
                 return BadRequest();
+            }
+
+            if (!device.DeviceConnected) { //nou HistoricData inserit correctament en aquest punt
+                ConnectDevice(device); //update nomes DeviceConnected del dispositiu
             }
 
             //TODO Return OK amb comanda de resposta del server
@@ -177,6 +175,35 @@ namespace Cloud_API.Controllers {
 
         private bool DataExists(int iddata) {
             return db.HistoricData.Any(e => e.IdhistoricData == iddata);
+        }
+
+        private void ConnectDevice(Devices device) {
+            logger.Info("Registering enabled device as connected");
+            //device.DeviceConnected = true;
+            //db.Devices.Update(device);
+            var dev = db.Devices.Attach(device);
+            dev.Entity.DeviceConnected = true;
+
+            var histdev = new HistoricDevices {
+                Iddevice = device.Iddevice,
+                HistDeviceDate = DateTime.Now,
+                IddeviceAction = 1,
+                HistDeviceIpaddress = null,
+                HistDeviceAux = null
+            };
+
+            var lastHistoricDevice = db.HistoricDevices.LastOrDefault();
+            if (lastHistoricDevice == default(HistoricDevices)) histdev.IdhistoricDevices = 1;
+            else histdev.IdhistoricDevices = lastHistoricDevice.IdhistoricDevices + 1;
+            db.HistoricDevices.Add(histdev);
+
+            try {
+                db.SaveChanges();
+            } catch (Exception ex) {
+                logger.Trace(ex);
+                logger.Error(ex, "Error registering device as connected");
+            }
+            logger.Info("Enabled device registered as connected");
         }
 
         #endregion
