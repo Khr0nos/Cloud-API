@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Cloud_Background.Models;
 
@@ -17,8 +16,7 @@ namespace Cloud_Background {
                 where d.DeviceEnabled && d.DeviceConnected
                 select d;
 
-            var devices = devs.ToList();
-            foreach (var dev in devices) {
+            foreach (var dev in devs) {
                 var lastdata =
                     db.HistoricData.OrderByDescending(d => d.IDHistoricData)
                         .FirstOrDefault(d => d.IDDevice == dev.IDDevice);
@@ -38,8 +36,7 @@ namespace Cloud_Background {
                 HistDeviceAux = "Device interval timeout"
             };
 
-            //Primer per ordre descendent == ultim per ordre normal
-            var lastHistoricDevice = db.HistoricDevices.OrderByDescending(d => d.IDHistoricDevices).FirstOrDefault();
+            var lastHistoricDevice = db.HistoricDevices.LastOrDefault();
             if (lastHistoricDevice == default(HistoricDevices)) histdev.IDHistoricDevices = 1;
             else histdev.IDHistoricDevices = lastHistoricDevice.IDHistoricDevices + 1;
             db.HistoricDevices.Add(histdev);
@@ -47,7 +44,7 @@ namespace Cloud_Background {
             try {
                 db.SaveChanges();
             } catch (Exception ex) {
-                Debug.WriteLine(ex);
+                Console.WriteLine(ex);
                 return;
             }
 
@@ -68,7 +65,7 @@ namespace Cloud_Background {
                     HistDeviceAux = "Device disconnection due to timeout error"
                 };
 
-                lastHistoricDevice = db.HistoricDevices.OrderByDescending(d => d.IDHistoricDevices).FirstOrDefault();
+                lastHistoricDevice = db.HistoricDevices.LastOrDefault();
                 if (lastHistoricDevice == default(HistoricDevices)) histdev.IDHistoricDevices = 1;
                 else histdev.IDHistoricDevices = lastHistoricDevice.IDHistoricDevices + 1;
                 db.HistoricDevices.Add(histdev);
@@ -76,7 +73,7 @@ namespace Cloud_Background {
                 try {
                     db.SaveChanges();
                 } catch (Exception ex) {
-                    Debug.WriteLine(ex);
+                    Console.WriteLine(ex);
                 }
             }
         }

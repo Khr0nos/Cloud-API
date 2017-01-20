@@ -1,0 +1,478 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AuxDataType">
+          <Key>
+            <PropertyRef Name="IDAuxDataType" />
+          </Key>
+          <Property Name="IDAuxDataType" Type="int" Nullable="false" />
+          <Property Name="DataType" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AuxDeviceActions">
+          <Key>
+            <PropertyRef Name="IDAuxDeviceAction" />
+          </Key>
+          <Property Name="IDAuxDeviceAction" Type="int" Nullable="false" />
+          <Property Name="DeviceAction" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AuxDeviceProtocols">
+          <Key>
+            <PropertyRef Name="IDDeviceProtocol" />
+          </Key>
+          <Property Name="IDDeviceProtocol" Type="int" Nullable="false" />
+          <Property Name="DeviceProtocol" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AuxDeviceType">
+          <Key>
+            <PropertyRef Name="IDAuxDeviceType" />
+          </Key>
+          <Property Name="IDAuxDeviceType" Type="int" Nullable="false" />
+          <Property Name="DeviceType" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Devices">
+          <Key>
+            <PropertyRef Name="IDDevice" />
+          </Key>
+          <Property Name="IDDevice" Type="int" Nullable="false" />
+          <Property Name="DeviceName" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="IDAuxDeviceType" Type="int" Nullable="false" />
+          <Property Name="DeviceEnabled" Type="bit" Nullable="false" />
+          <Property Name="DeviceConnected" Type="bit" Nullable="false" />
+          <Property Name="DeviceNeedLogin" Type="bit" Nullable="false" />
+          <Property Name="DeviceInterval" Type="int" Nullable="false" />
+          <Property Name="DeviceCreationDate" Type="datetime" Nullable="false" />
+          <Property Name="DeviceUsername" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="DevicePassword" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="IDDeviceProtocol" Type="int" Nullable="false" />
+          <Property Name="DeviceAux" Type="nvarchar" MaxLength="1024" />
+        </EntityType>
+        <EntityType Name="HistoricData">
+          <Key>
+            <PropertyRef Name="IDHistoricData" />
+          </Key>
+          <Property Name="IDHistoricData" Type="int" Nullable="false" />
+          <Property Name="IDDevice" Type="int" Nullable="false" />
+          <Property Name="HistDataDate" Type="datetime" Nullable="false" />
+          <Property Name="HistDataValue" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="IDDataType" Type="int" Nullable="false" />
+          <Property Name="HistDataToDevice" Type="bit" Nullable="false" />
+          <Property Name="HistDataAck" Type="bit" Nullable="false" />
+          <Property Name="HistDataAux" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="HistoricDevices">
+          <Key>
+            <PropertyRef Name="IDHistoricDevices" />
+          </Key>
+          <Property Name="IDHistoricDevices" Type="int" Nullable="false" />
+          <Property Name="IDDevice" Type="int" Nullable="false" />
+          <Property Name="HistDeviceDate" Type="datetime" Nullable="false" />
+          <Property Name="IDDeviceAction" Type="int" Nullable="false" />
+          <Property Name="HistDeviceIPaddress" Type="nvarchar" MaxLength="16" />
+          <Property Name="HistDeviceAux" Type="nvarchar" MaxLength="1024" />
+        </EntityType>
+        <Association Name="FK_Devices_AuxDeviceProtocols">
+          <End Role="AuxDeviceProtocols" Type="Self.AuxDeviceProtocols" Multiplicity="1" />
+          <End Role="Devices" Type="Self.Devices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuxDeviceProtocols">
+              <PropertyRef Name="IDDeviceProtocol" />
+            </Principal>
+            <Dependent Role="Devices">
+              <PropertyRef Name="IDDeviceProtocol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Devices_AuxType">
+          <End Role="AuxDeviceType" Type="Self.AuxDeviceType" Multiplicity="1" />
+          <End Role="Devices" Type="Self.Devices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuxDeviceType">
+              <PropertyRef Name="IDAuxDeviceType" />
+            </Principal>
+            <Dependent Role="Devices">
+              <PropertyRef Name="IDAuxDeviceType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoricData_AuxDataType">
+          <End Role="AuxDataType" Type="Self.AuxDataType" Multiplicity="1" />
+          <End Role="HistoricData" Type="Self.HistoricData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuxDataType">
+              <PropertyRef Name="IDAuxDataType" />
+            </Principal>
+            <Dependent Role="HistoricData">
+              <PropertyRef Name="IDDataType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoricData_Devices">
+          <End Role="Devices" Type="Self.Devices" Multiplicity="1" />
+          <End Role="HistoricData" Type="Self.HistoricData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Devices">
+              <PropertyRef Name="IDDevice" />
+            </Principal>
+            <Dependent Role="HistoricData">
+              <PropertyRef Name="IDDevice" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoricDevices_AuxDeviceActions1">
+          <End Role="AuxDeviceActions" Type="Self.AuxDeviceActions" Multiplicity="1" />
+          <End Role="HistoricDevices" Type="Self.HistoricDevices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuxDeviceActions">
+              <PropertyRef Name="IDAuxDeviceAction" />
+            </Principal>
+            <Dependent Role="HistoricDevices">
+              <PropertyRef Name="IDDeviceAction" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoricDevices_Devices">
+          <End Role="Devices" Type="Self.Devices" Multiplicity="1" />
+          <End Role="HistoricDevices" Type="Self.HistoricDevices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Devices">
+              <PropertyRef Name="IDDevice" />
+            </Principal>
+            <Dependent Role="HistoricDevices">
+              <PropertyRef Name="IDDevice" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DatabaseModelStoreContainer">
+          <EntitySet Name="AuxDataType" EntityType="Self.AuxDataType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuxDeviceActions" EntityType="Self.AuxDeviceActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuxDeviceProtocols" EntityType="Self.AuxDeviceProtocols" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuxDeviceType" EntityType="Self.AuxDeviceType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Devices" EntityType="Self.Devices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HistoricData" EntityType="Self.HistoricData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HistoricDevices" EntityType="Self.HistoricDevices" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Devices_AuxDeviceProtocols" Association="Self.FK_Devices_AuxDeviceProtocols">
+            <End Role="AuxDeviceProtocols" EntitySet="AuxDeviceProtocols" />
+            <End Role="Devices" EntitySet="Devices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Devices_AuxType" Association="Self.FK_Devices_AuxType">
+            <End Role="AuxDeviceType" EntitySet="AuxDeviceType" />
+            <End Role="Devices" EntitySet="Devices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoricData_AuxDataType" Association="Self.FK_HistoricData_AuxDataType">
+            <End Role="AuxDataType" EntitySet="AuxDataType" />
+            <End Role="HistoricData" EntitySet="HistoricData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoricData_Devices" Association="Self.FK_HistoricData_Devices">
+            <End Role="Devices" EntitySet="Devices" />
+            <End Role="HistoricData" EntitySet="HistoricData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoricDevices_AuxDeviceActions1" Association="Self.FK_HistoricDevices_AuxDeviceActions1">
+            <End Role="AuxDeviceActions" EntitySet="AuxDeviceActions" />
+            <End Role="HistoricDevices" EntitySet="HistoricDevices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoricDevices_Devices" Association="Self.FK_HistoricDevices_Devices">
+            <End Role="Devices" EntitySet="Devices" />
+            <End Role="HistoricDevices" EntitySet="HistoricDevices" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AuxDataType">
+          <Key>
+            <PropertyRef Name="IDAuxDataType" />
+          </Key>
+          <Property Name="IDAuxDataType" Type="Int32" Nullable="false" />
+          <Property Name="DataType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="HistoricData" Relationship="Self.FK_HistoricData_AuxDataType" FromRole="AuxDataType" ToRole="HistoricData" />
+        </EntityType>
+        <EntityType Name="AuxDeviceActions">
+          <Key>
+            <PropertyRef Name="IDAuxDeviceAction" />
+          </Key>
+          <Property Name="IDAuxDeviceAction" Type="Int32" Nullable="false" />
+          <Property Name="DeviceAction" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="HistoricDevices" Relationship="Self.FK_HistoricDevices_AuxDeviceActions1" FromRole="AuxDeviceActions" ToRole="HistoricDevices" />
+        </EntityType>
+        <EntityType Name="AuxDeviceProtocols">
+          <Key>
+            <PropertyRef Name="IDDeviceProtocol" />
+          </Key>
+          <Property Name="IDDeviceProtocol" Type="Int32" Nullable="false" />
+          <Property Name="DeviceProtocol" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Devices" Relationship="Self.FK_Devices_AuxDeviceProtocols" FromRole="AuxDeviceProtocols" ToRole="Devices" />
+        </EntityType>
+        <EntityType Name="AuxDeviceType">
+          <Key>
+            <PropertyRef Name="IDAuxDeviceType" />
+          </Key>
+          <Property Name="IDAuxDeviceType" Type="Int32" Nullable="false" />
+          <Property Name="DeviceType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Devices" Relationship="Self.FK_Devices_AuxType" FromRole="AuxDeviceType" ToRole="Devices" />
+        </EntityType>
+        <EntityType Name="Devices">
+          <Key>
+            <PropertyRef Name="IDDevice" />
+          </Key>
+          <Property Name="IDDevice" Type="Int32" Nullable="false" />
+          <Property Name="DeviceName" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="IDAuxDeviceType" Type="Int32" Nullable="false" />
+          <Property Name="DeviceEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="DeviceConnected" Type="Boolean" Nullable="false" />
+          <Property Name="DeviceNeedLogin" Type="Boolean" Nullable="false" />
+          <Property Name="DeviceInterval" Type="Int32" Nullable="false" />
+          <Property Name="DeviceCreationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DeviceUsername" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="DevicePassword" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="IDDeviceProtocol" Type="Int32" Nullable="false" />
+          <Property Name="DeviceAux" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AuxDeviceProtocols" Relationship="Self.FK_Devices_AuxDeviceProtocols" FromRole="Devices" ToRole="AuxDeviceProtocols" />
+          <NavigationProperty Name="AuxDeviceType" Relationship="Self.FK_Devices_AuxType" FromRole="Devices" ToRole="AuxDeviceType" />
+          <NavigationProperty Name="HistoricData" Relationship="Self.FK_HistoricData_Devices" FromRole="Devices" ToRole="HistoricData" />
+          <NavigationProperty Name="HistoricDevices" Relationship="Self.FK_HistoricDevices_Devices" FromRole="Devices" ToRole="HistoricDevices" />
+        </EntityType>
+        <EntityType Name="HistoricData">
+          <Key>
+            <PropertyRef Name="IDHistoricData" />
+          </Key>
+          <Property Name="IDHistoricData" Type="Int32" Nullable="false" />
+          <Property Name="IDDevice" Type="Int32" Nullable="false" />
+          <Property Name="HistDataDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="HistDataValue" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IDDataType" Type="Int32" Nullable="false" />
+          <Property Name="HistDataToDevice" Type="Boolean" Nullable="false" />
+          <Property Name="HistDataAck" Type="Boolean" Nullable="false" />
+          <Property Name="HistDataAux" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AuxDataType" Relationship="Self.FK_HistoricData_AuxDataType" FromRole="HistoricData" ToRole="AuxDataType" />
+          <NavigationProperty Name="Devices" Relationship="Self.FK_HistoricData_Devices" FromRole="HistoricData" ToRole="Devices" />
+        </EntityType>
+        <EntityType Name="HistoricDevices">
+          <Key>
+            <PropertyRef Name="IDHistoricDevices" />
+          </Key>
+          <Property Name="IDHistoricDevices" Type="Int32" Nullable="false" />
+          <Property Name="IDDevice" Type="Int32" Nullable="false" />
+          <Property Name="HistDeviceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IDDeviceAction" Type="Int32" Nullable="false" />
+          <Property Name="HistDeviceIPaddress" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="HistDeviceAux" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AuxDeviceActions" Relationship="Self.FK_HistoricDevices_AuxDeviceActions1" FromRole="HistoricDevices" ToRole="AuxDeviceActions" />
+          <NavigationProperty Name="Devices" Relationship="Self.FK_HistoricDevices_Devices" FromRole="HistoricDevices" ToRole="Devices" />
+        </EntityType>
+        <Association Name="FK_HistoricData_AuxDataType">
+          <End Role="AuxDataType" Type="Self.AuxDataType" Multiplicity="1" />
+          <End Role="HistoricData" Type="Self.HistoricData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuxDataType">
+              <PropertyRef Name="IDAuxDataType" />
+            </Principal>
+            <Dependent Role="HistoricData">
+              <PropertyRef Name="IDDataType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoricDevices_AuxDeviceActions1">
+          <End Role="AuxDeviceActions" Type="Self.AuxDeviceActions" Multiplicity="1" />
+          <End Role="HistoricDevices" Type="Self.HistoricDevices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuxDeviceActions">
+              <PropertyRef Name="IDAuxDeviceAction" />
+            </Principal>
+            <Dependent Role="HistoricDevices">
+              <PropertyRef Name="IDDeviceAction" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Devices_AuxDeviceProtocols">
+          <End Role="AuxDeviceProtocols" Type="Self.AuxDeviceProtocols" Multiplicity="1" />
+          <End Role="Devices" Type="Self.Devices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuxDeviceProtocols">
+              <PropertyRef Name="IDDeviceProtocol" />
+            </Principal>
+            <Dependent Role="Devices">
+              <PropertyRef Name="IDDeviceProtocol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Devices_AuxType">
+          <End Role="AuxDeviceType" Type="Self.AuxDeviceType" Multiplicity="1" />
+          <End Role="Devices" Type="Self.Devices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuxDeviceType">
+              <PropertyRef Name="IDAuxDeviceType" />
+            </Principal>
+            <Dependent Role="Devices">
+              <PropertyRef Name="IDAuxDeviceType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoricData_Devices">
+          <End Role="Devices" Type="Self.Devices" Multiplicity="1" />
+          <End Role="HistoricData" Type="Self.HistoricData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Devices">
+              <PropertyRef Name="IDDevice" />
+            </Principal>
+            <Dependent Role="HistoricData">
+              <PropertyRef Name="IDDevice" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoricDevices_Devices">
+          <End Role="Devices" Type="Self.Devices" Multiplicity="1" />
+          <End Role="HistoricDevices" Type="Self.HistoricDevices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Devices">
+              <PropertyRef Name="IDDevice" />
+            </Principal>
+            <Dependent Role="HistoricDevices">
+              <PropertyRef Name="IDDevice" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DatabaseContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AuxDataType" EntityType="Self.AuxDataType" />
+          <EntitySet Name="AuxDeviceActions" EntityType="Self.AuxDeviceActions" />
+          <EntitySet Name="AuxDeviceProtocols" EntityType="Self.AuxDeviceProtocols" />
+          <EntitySet Name="AuxDeviceType" EntityType="Self.AuxDeviceType" />
+          <EntitySet Name="Devices" EntityType="Self.Devices" />
+          <EntitySet Name="HistoricData" EntityType="Self.HistoricData" />
+          <EntitySet Name="HistoricDevices" EntityType="Self.HistoricDevices" />
+          <AssociationSet Name="FK_HistoricData_AuxDataType" Association="Self.FK_HistoricData_AuxDataType">
+            <End Role="AuxDataType" EntitySet="AuxDataType" />
+            <End Role="HistoricData" EntitySet="HistoricData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoricDevices_AuxDeviceActions1" Association="Self.FK_HistoricDevices_AuxDeviceActions1">
+            <End Role="AuxDeviceActions" EntitySet="AuxDeviceActions" />
+            <End Role="HistoricDevices" EntitySet="HistoricDevices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Devices_AuxDeviceProtocols" Association="Self.FK_Devices_AuxDeviceProtocols">
+            <End Role="AuxDeviceProtocols" EntitySet="AuxDeviceProtocols" />
+            <End Role="Devices" EntitySet="Devices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Devices_AuxType" Association="Self.FK_Devices_AuxType">
+            <End Role="AuxDeviceType" EntitySet="AuxDeviceType" />
+            <End Role="Devices" EntitySet="Devices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoricData_Devices" Association="Self.FK_HistoricData_Devices">
+            <End Role="Devices" EntitySet="Devices" />
+            <End Role="HistoricData" EntitySet="HistoricData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoricDevices_Devices" Association="Self.FK_HistoricDevices_Devices">
+            <End Role="Devices" EntitySet="Devices" />
+            <End Role="HistoricDevices" EntitySet="HistoricDevices" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DatabaseModelStoreContainer" CdmEntityContainer="DatabaseContext">
+          <EntitySetMapping Name="AuxDataType">
+            <EntityTypeMapping TypeName="DatabaseModel.AuxDataType">
+              <MappingFragment StoreEntitySet="AuxDataType">
+                <ScalarProperty Name="IDAuxDataType" ColumnName="IDAuxDataType" />
+                <ScalarProperty Name="DataType" ColumnName="DataType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuxDeviceActions">
+            <EntityTypeMapping TypeName="DatabaseModel.AuxDeviceActions">
+              <MappingFragment StoreEntitySet="AuxDeviceActions">
+                <ScalarProperty Name="IDAuxDeviceAction" ColumnName="IDAuxDeviceAction" />
+                <ScalarProperty Name="DeviceAction" ColumnName="DeviceAction" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuxDeviceProtocols">
+            <EntityTypeMapping TypeName="DatabaseModel.AuxDeviceProtocols">
+              <MappingFragment StoreEntitySet="AuxDeviceProtocols">
+                <ScalarProperty Name="IDDeviceProtocol" ColumnName="IDDeviceProtocol" />
+                <ScalarProperty Name="DeviceProtocol" ColumnName="DeviceProtocol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuxDeviceType">
+            <EntityTypeMapping TypeName="DatabaseModel.AuxDeviceType">
+              <MappingFragment StoreEntitySet="AuxDeviceType">
+                <ScalarProperty Name="IDAuxDeviceType" ColumnName="IDAuxDeviceType" />
+                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Devices">
+            <EntityTypeMapping TypeName="DatabaseModel.Devices">
+              <MappingFragment StoreEntitySet="Devices">
+                <ScalarProperty Name="IDDevice" ColumnName="IDDevice" />
+                <ScalarProperty Name="DeviceName" ColumnName="DeviceName" />
+                <ScalarProperty Name="IDAuxDeviceType" ColumnName="IDAuxDeviceType" />
+                <ScalarProperty Name="DeviceEnabled" ColumnName="DeviceEnabled" />
+                <ScalarProperty Name="DeviceConnected" ColumnName="DeviceConnected" />
+                <ScalarProperty Name="DeviceNeedLogin" ColumnName="DeviceNeedLogin" />
+                <ScalarProperty Name="DeviceInterval" ColumnName="DeviceInterval" />
+                <ScalarProperty Name="DeviceCreationDate" ColumnName="DeviceCreationDate" />
+                <ScalarProperty Name="DeviceUsername" ColumnName="DeviceUsername" />
+                <ScalarProperty Name="DevicePassword" ColumnName="DevicePassword" />
+                <ScalarProperty Name="IDDeviceProtocol" ColumnName="IDDeviceProtocol" />
+                <ScalarProperty Name="DeviceAux" ColumnName="DeviceAux" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HistoricData">
+            <EntityTypeMapping TypeName="DatabaseModel.HistoricData">
+              <MappingFragment StoreEntitySet="HistoricData">
+                <ScalarProperty Name="IDHistoricData" ColumnName="IDHistoricData" />
+                <ScalarProperty Name="IDDevice" ColumnName="IDDevice" />
+                <ScalarProperty Name="HistDataDate" ColumnName="HistDataDate" />
+                <ScalarProperty Name="HistDataValue" ColumnName="HistDataValue" />
+                <ScalarProperty Name="IDDataType" ColumnName="IDDataType" />
+                <ScalarProperty Name="HistDataToDevice" ColumnName="HistDataToDevice" />
+                <ScalarProperty Name="HistDataAck" ColumnName="HistDataAck" />
+                <ScalarProperty Name="HistDataAux" ColumnName="HistDataAux" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HistoricDevices">
+            <EntityTypeMapping TypeName="DatabaseModel.HistoricDevices">
+              <MappingFragment StoreEntitySet="HistoricDevices">
+                <ScalarProperty Name="IDHistoricDevices" ColumnName="IDHistoricDevices" />
+                <ScalarProperty Name="IDDevice" ColumnName="IDDevice" />
+                <ScalarProperty Name="HistDeviceDate" ColumnName="HistDeviceDate" />
+                <ScalarProperty Name="IDDeviceAction" ColumnName="IDDeviceAction" />
+                <ScalarProperty Name="HistDeviceIPaddress" ColumnName="HistDeviceIPaddress" />
+                <ScalarProperty Name="HistDeviceAux" ColumnName="HistDeviceAux" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
