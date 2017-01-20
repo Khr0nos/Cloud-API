@@ -84,10 +84,16 @@ namespace Cloud_API.Controllers {
                 return BadRequest(new JObject { ["Data type not found"] = nou.IddataType});
             }
 
+            if (!device.DeviceConnected) {
+                //device.DeviceConnected = true;
+                //db.Devices.Update(device);
+                var dev = db.Devices.Attach(device);  //update nomes DeviceConnected del dispositiu
+                dev.Entity.DeviceConnected = true;
+            }
+
             var id = db.HistoricData.Last().IdhistoricData;
             nou.IdhistoricData = id + 1;
             nou.HistDataDate = DateTime.Now;
-
             db.HistoricData.Add(nou);
 
             try {
@@ -97,13 +103,14 @@ namespace Cloud_API.Controllers {
                 if (DataExists(nou.IdhistoricData)) {
                     return StatusCode((int) HttpStatusCode.Conflict, new JObject { ["Data already existing"] = nou.IdhistoricData});
                 }
+                return BadRequest();
             } catch (Exception ex) {
                 logger.Trace(ex);
                 logger.Error(ex.Message);
                 return BadRequest();
             }
 
-            //Return OK amb comanda de resposta del server
+            //TODO Return OK amb comanda de resposta del server
 
             logger.Info("Data added correctly");
             return Created($"/api/historicdata/{nou.IdhistoricData}", nou);
