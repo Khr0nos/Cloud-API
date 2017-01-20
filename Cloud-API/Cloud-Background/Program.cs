@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 
 namespace Cloud_Background {
     public class Program {
@@ -8,20 +7,73 @@ namespace Cloud_Background {
 
         public static void Main(string[] args) {
             db = new DatabaseContext();
-            ProcessDb();
+            ProcessDevices();
         }
 
-        private static void ProcessDb() {
+        private static void ProcessDevices() {
             var devs = from d in db.Devices
                 where d.DeviceEnabled && d.DeviceConnected
-                select d.IDDevice;
+                select d;
 
-            foreach (var id in devs) {
-                var data = db.HistoricData.OrderByDescending(d => d.IDHistoricData)
-                    .First(d => d.IDDevice == id);
-                Console.WriteLine(DateTime.Now);
-                Console.WriteLine($"last with id: {data.IDDevice} {data.HistDataDate}");
-                Console.WriteLine();
+            foreach (var dev in devs) {
+                var lastdata =
+                    db.HistoricData.OrderByDescending(d => d.IDHistoricData)
+                        .FirstOrDefault(d => d.IDDevice == dev.IDDevice);
+                if (DateTime.Now - lastdata?.HistDataDate >= TimeSpan.FromMilliseconds(dev.DeviceInterval * 2)) {
+                    DeviceCommError(dev);
+                }
+            }
+        }
+
+        private static void DeviceCommError(Devices dev) {
+            //registrar error per timeout d'interval de dispositiu
+            var histdev = new HistoricDevices {
+                IDDevice = dev.IDDevice,
+                HistDeviceDate = DateTime.Now,
+                IDDeviceAction = 8,
+                HistDeviceIPaddress = null,
+                HistDeviceAux = "Device interval timeout"
+            };
+
+            var lastHistoricDevice = db.HistoricDevices.LastOrDefault();
+            if (lastHistoricDevice == default(HistoricDevices)) histdev.IDHistoricDevices = 1;
+            else histdev.IDHistoricDevices = lastHistoricDevice.IDHistoricDevices + 1;
+            db.HistoricDevices.Add(histdev);
+
+            try {
+                db.SaveChanges();
+            } catch (Exception ex) {
+                Console.WriteLine(ex);
+                return;
+            }
+
+            //registrar desconnexió de dispositiu si s'han registrat >= 3 timeouts
+            var numtimeout = db.HistoricDevices.Count(
+                d => d.IDDevice == dev.IDDevice && d.IDDeviceAction == 8 &&
+                     d.HistDeviceAux == "Device interval timeout");
+            if (numtimeout >= 3) {
+                dev.DeviceConnected = false;
+                db.Devices.Attach(dev);
+                db.Entry(dev).Property(c => c.DeviceConnected).IsModified = true;
+
+                histdev = new HistoricDevices {
+                    IDDevice = dev.IDDevice,
+                    HistDeviceDate = DateTime.Now,
+                    IDDeviceAction = 2,
+                    HistDeviceIPaddress = null,
+                    HistDeviceAux = "Device disconnection due to timeout error"
+                };
+
+                lastHistoricDevice = db.HistoricDevices.LastOrDefault();
+                if (lastHistoricDevice == default(HistoricDevices)) histdev.IDHistoricDevices = 1;
+                else histdev.IDHistoricDevices = lastHistoricDevice.IDHistoricDevices + 1;
+                db.HistoricDevices.Add(histdev);
+
+                try {
+                    db.SaveChanges();
+                } catch (Exception ex) {
+                    Console.WriteLine(ex);
+                }
             }
         }
     }
