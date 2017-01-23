@@ -1,20 +1,25 @@
+using System;
+using Microsoft.Rest;
+using Newtonsoft.Json;
 
-namespace CloudAPI.Rest.Client.Models
-{
-    using System.Linq;
-
-    public partial class HistoricData
-    {
+namespace CloudAPI.Rest.Client.Models {
+    public class HistoricData {
         /// <summary>
         /// Initializes a new instance of the HistoricData class.
         /// </summary>
-        public HistoricData() { }
+        public HistoricData() {}
 
         /// <summary>
         /// Initializes a new instance of the HistoricData class.
         /// </summary>
-        public HistoricData(int iddevice, string histDataValue, int iddataType, int? idhistoricData = default(int?), System.DateTime? histDataDate = default(System.DateTime?), bool? histDataToDevice = default(bool?), bool? histDataAck = default(bool?), string histDataAux = default(string))
-        {
+        public HistoricData(int iddevice,
+            string histDataValue,
+            int iddataType,
+            int? idhistoricData = default(int?),
+            DateTime? histDataDate = default(DateTime?),
+            bool? histDataToDevice = default(bool?),
+            bool? histDataAck = default(bool?),
+            string histDataAux = default(string)) {
             IdhistoricData = idhistoricData;
             Iddevice = iddevice;
             HistDataDate = histDataDate;
@@ -27,42 +32,42 @@ namespace CloudAPI.Rest.Client.Models
 
         /// <summary>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "idhistoricData")]
+        [JsonProperty(PropertyName = "idhistoricData")]
         public int? IdhistoricData { get; set; }
 
         /// <summary>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "iddevice")]
+        [JsonProperty(PropertyName = "iddevice")]
         public int Iddevice { get; set; }
 
         /// <summary>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "histDataDate")]
-        public System.DateTime? HistDataDate { get; set; }
+        [JsonProperty(PropertyName = "histDataDate")]
+        public DateTime? HistDataDate { get; set; }
 
         /// <summary>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "histDataValue")]
+        [JsonProperty(PropertyName = "histDataValue")]
         public string HistDataValue { get; set; }
 
         /// <summary>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "iddataType")]
+        [JsonProperty(PropertyName = "iddataType")]
         public int IddataType { get; set; }
 
         /// <summary>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "histDataToDevice")]
+        [JsonProperty(PropertyName = "histDataToDevice")]
         public bool? HistDataToDevice { get; set; }
 
         /// <summary>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "histDataAck")]
+        [JsonProperty(PropertyName = "histDataAck")]
         public bool? HistDataAck { get; set; }
 
         /// <summary>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "histDataAux")]
+        [JsonProperty(PropertyName = "histDataAux")]
         public string HistDataAux { get; set; }
 
         /// <summary>
@@ -71,11 +76,10 @@ namespace CloudAPI.Rest.Client.Models
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown if validation fails
         /// </exception>
-        public virtual void Validate()
-        {
-            if (HistDataValue == null)
-            {
-                throw new Microsoft.Rest.ValidationException(Microsoft.Rest.ValidationRules.CannotBeNull, "HistDataValue");
+        public virtual void Validate() {
+            if (HistDataValue == null) {
+                throw new ValidationException(ValidationRules.CannotBeNull,
+                    "HistDataValue");
             }
         }
     }

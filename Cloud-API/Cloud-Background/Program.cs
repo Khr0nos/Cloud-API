@@ -22,7 +22,7 @@ namespace Cloud_Background {
                 var lastdata =
                     db.HistoricData.OrderByDescending(d => d.IDHistoricData)
                         .FirstOrDefault(d => d.IDDevice == dev.IDDevice);
-                if (DateTime.Now - lastdata?.HistDataDate >= TimeSpan.FromMilliseconds(dev.DeviceInterval * 2)) {
+                if (DateTime.Now - lastdata?.HistDataDate >= TimeSpan.FromMilliseconds(dev.DeviceInterval * 2 + 1)) {
                     DeviceCommError(dev);
                 }
             }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Cloud_API.Models;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -94,14 +96,11 @@ namespace Cloud_API.Controllers {
                 db.SaveChanges();
             } catch (DbUpdateException ex) {
                 logger.Warn(ex, ex.Message);
-                if (DataExists(nou.IdhistoricData)) {
-                    return StatusCode((int) HttpStatusCode.Conflict, new JObject { ["Data already existing"] = nou.IdhistoricData});
-                }
-                return BadRequest();
+                return DataExists(nou.IdhistoricData) ? StatusCode((int) HttpStatusCode.Conflict, new JObject { ["Data exists already"] = nou.IdhistoricData}) : BadRequest(nou);
             } catch (Exception ex) {
                 logger.Trace(ex);
                 logger.Error(ex.Message);
-                return BadRequest();
+                return BadRequest(nou);
             }
 
             if (!device.DeviceConnected) { //nou HistoricData inserit correctament en aquest punt
@@ -121,6 +120,9 @@ namespace Cloud_API.Controllers {
         /// <param name="id">HistoricData identifier</param>
         /// <param name="nou">HistoricData to be updated</param>
         /// <returns></returns>
+        /// <response code="204">Historic Data updated</response>
+        /// <response code="400">Data error</response>
+        /// <response code="404">Historic Data item not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -130,17 +132,75 @@ namespace Cloud_API.Controllers {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (id != nou.IdhistoricData) return BadRequest(new JObject { ["ID from body different from URL parameter"] = nou.IdhistoricData });
 
-            db.HistoricData.Update(nou);
+            var data = db.HistoricData.Find(id);
+            if (data == null) return NotFound(new JObject { ["Data not found by id:"] = nou.Iddevice });
+
+            Update(data, nou);
 
             try {
                 db.SaveChanges();
             } catch (DbUpdateConcurrencyException ex) {
                 logger.Warn(ex, ex.Message);
-                if (!DataExists(id)) return NotFound(new JObject { ["Data not found by id:"] = id });
+                if (!DataExists(id)) return NotFound(new JObject { ["Data not found"] = "Data could have been deleted" });
+                return BadRequest(nou);
             } catch (Exception ex) {
                 logger.Trace(ex);
                 logger.Error(ex.Message);
+                return BadRequest(nou);
             }
+            return NoContent();
+        }
+
+        // PATCH api/historicdata/5
+        /// <summary>
+        /// Updates some HistoricData information
+        /// </summary>
+        /// <param name="id">HistoricData identifier</param>
+        /// <param name="patch">HistoricData updated information</param>
+        /// <returns></returns>
+        /// <response code="204">HistoricData updated</response>
+        /// <response code="400">Data error</response>
+        /// <response code="404">HistoricData not found</response>
+        /// <response code="403">Update not allowed</response>
+        [HttpPatch("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(JObject), 404)]
+        [ProducesResponseType(typeof(JObject), 400)]
+        [ProducesResponseType(typeof(JObject), 403)]
+        public IActionResult Patch(int id, [FromBody] JsonPatchDocument<HistoricData> patch) {
+            logger.Info("PATCH HistoricData");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var dev = db.HistoricData.Find(id);
+            if (dev == null) return NotFound(new JObject {["Data not found by id:"] = id});
+
+            foreach (var op in patch.Operations) {
+                if (op.OperationType != OperationType.Replace)
+                    return BadRequest(new JObject {["Syntax error"] = "op field should be replace"});
+                if (string.Equals(op.path, "HistDataDate", StringComparison.OrdinalIgnoreCase))
+                    return StatusCode((int) HttpStatusCode.Forbidden,
+                        new JObject {["Update error"] = "Data date cannot be modified"});
+                if (string.Equals(op.path, "IdhistoricData", StringComparison.OrdinalIgnoreCase))
+                    return StatusCode((int)HttpStatusCode.Forbidden,
+                        new JObject { ["Update error"] = "Data id cannot be modified" });
+                if (!op.path.StartsWith("/")) op.path = "/" + op.path;
+            }
+
+            var patched = db.HistoricData.Attach(dev);
+            patch.ApplyTo(patched.Entity, ModelState);
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try {
+                db.SaveChanges();
+            } catch (DbUpdateConcurrencyException ex) {
+                logger.Warn(ex, ex.Message);
+                return BadRequest(new JObject {["Data Update error"] = "Concurrency Error"});
+            } catch (Exception ex) {
+                logger.Trace(ex);
+                logger.Error(ex.Message);
+                return BadRequest();
+            }
+
             return NoContent();
         }
 
@@ -150,9 +210,13 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <param name="id">HistoricData identifier</param>
         /// <returns></returns>
+        /// <response code="200">Historic Data item deleted</response>
+        /// <response code="404">Historic Data item not found</response>
+        /// <response code="400">Data error</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(HistoricData), 200)]
         [ProducesResponseType(typeof(JObject), 404)]
+        [ProducesResponseType(typeof(JObject), 400)]
         public IActionResult Delete(int id) {
             logger.Info("DELETE Data");
             var res = db.HistoricData.Find(id);
@@ -165,6 +229,7 @@ namespace Cloud_API.Controllers {
             } catch (Exception ex) {
                 logger.Trace(ex);
                 logger.Error(ex.Message);
+                return BadRequest();
             }
 
             logger.Info($"Data with id={id} deleted");
@@ -204,6 +269,17 @@ namespace Cloud_API.Controllers {
                 logger.Error(ex, "Error registering device as connected");
             }
             logger.Info("Enabled device registered as connected");
+        }
+
+        private void Update(HistoricData old, HistoricData nou) {
+            var updated = db.HistoricData.Attach(old);
+
+            updated.Entity.Iddevice = nou.Iddevice;
+            updated.Entity.HistDataValue = nou.HistDataValue;
+            updated.Entity.IddataType = nou.IddataType;
+            updated.Entity.HistDataToDevice = nou.HistDataToDevice;
+            updated.Entity.HistDataAck = nou.HistDataAck;
+            updated.Entity.HistDataAux = nou.HistDataAux;
         }
 
         #endregion

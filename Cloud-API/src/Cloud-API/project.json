@@ -34,6 +34,7 @@
       "type": "build"
     },
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
+    "Microsoft.AspNetCore.JsonPatch": "1.1.0",
     "NLog.Extensions.Logging": "1.0.0-*",
     "NLog.Web.AspNetCore": "4.3.0",
     "Swashbuckle": "6.0.0-beta902",
