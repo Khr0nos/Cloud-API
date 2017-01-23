@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -66,7 +67,7 @@ namespace Cloud_API.Controllers {
         /// <response code="400">Data error</response>
         /// <response code="409">Conflict, already existing item</response>
         [HttpPost]
-        [ProducesResponseType(typeof(HistoricData), 201)]
+        [ProducesResponseType(typeof(JObject), 201)]
         [ProducesResponseType(typeof(JObject), 400)]
         [ProducesResponseType(typeof(JObject), 409)]
         public IActionResult Post([FromBody] HistoricData nou) {
@@ -107,10 +108,10 @@ namespace Cloud_API.Controllers {
                 ConnectDevice(device); //update nomes DeviceConnected del dispositiu
             }
 
-            //TODO Return OK amb comanda de resposta del server
-
             logger.Info("Data added correctly");
-            return Created($"/api/historicdata/{nou.IdhistoricData}", nou);
+            var ok = new JObject(new JProperty("Inserted data", JObject.FromObject(nou)),
+                new JProperty("Interval", device.DeviceInterval));
+            return Created($"/api/historicdata/{nou.IdhistoricData}", ok);
         }
 
         // PUT api/historicdata/5
@@ -176,12 +177,20 @@ namespace Cloud_API.Controllers {
             foreach (var op in patch.Operations) {
                 if (op.OperationType != OperationType.Replace)
                     return BadRequest(new JObject {["Syntax error"] = "op field should be replace"});
-                if (string.Equals(op.path, "HistDataDate", StringComparison.OrdinalIgnoreCase))
+
+                var path = op.path;
+                if (path.StartsWith("/")) path = path.Substring(1);
+
+                if (string.Equals(path, "HistDataDate", StringComparison.OrdinalIgnoreCase))
                     return StatusCode((int) HttpStatusCode.Forbidden,
                         new JObject {["Update error"] = "Data date cannot be modified"});
-                if (string.Equals(op.path, "IdhistoricData", StringComparison.OrdinalIgnoreCase))
+
+                if (string.Equals(path, "IdhistoricData", StringComparison.OrdinalIgnoreCase))
                     return StatusCode((int)HttpStatusCode.Forbidden,
                         new JObject { ["Update error"] = "Data id cannot be modified" });
+
+                if (!Validate(op)) return BadRequest(new JObject {["Update data error"] = "Incorrect value"});
+
                 if (!op.path.StartsWith("/")) op.path = "/" + op.path;
             }
 
@@ -280,6 +289,24 @@ namespace Cloud_API.Controllers {
             updated.Entity.HistDataToDevice = nou.HistDataToDevice;
             updated.Entity.HistDataAck = nou.HistDataAck;
             updated.Entity.HistDataAux = nou.HistDataAux;
+        }
+
+        private bool Validate(Operation<HistoricData> op) { //TODO validacio a la interficie de client, preferiblement
+            if (string.Equals(op.path, "iddevice", StringComparison.OrdinalIgnoreCase)) {
+                if (op.value is int == false) return false;
+                if ((int) op.value <= 0) return false;
+            }
+            if (string.Equals(op.path, "iddatatype", StringComparison.OrdinalIgnoreCase)) {
+                if (op.value is int == false) return false;
+                if ((int)op.value <= 0) return false;
+            }
+            if (string.Equals(op.path, "histdatatodevice", StringComparison.OrdinalIgnoreCase)) {
+                if (op.value is bool == false) return false;
+            }
+            if (string.Equals(op.path, "histdataack", StringComparison.OrdinalIgnoreCase)) {
+                if (op.value is bool == false) return false;
+            }
+            return true;
         }
 
         #endregion
