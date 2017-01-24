@@ -13,15 +13,13 @@ namespace Cloud_Background {
         }
 
         private static void ProcessDevices() {
-            var devs = from d in db.Devices
-                where d.DeviceEnabled && d.DeviceConnected
-                select d;
+            var devs = (from d in db.Devices
+                       where d.DeviceEnabled && d.DeviceConnected
+                       select d).ToList();
 
-            var devices = devs.ToList();
-            foreach (var dev in devices) {
-                var lastdata =
-                    db.HistoricData.OrderByDescending(d => d.IDHistoricData)
-                        .FirstOrDefault(d => d.IDDevice == dev.IDDevice);
+            foreach (var dev in devs) {
+                var lastdata = db.HistoricData.OrderByDescending(d => d.IDHistoricData)
+                                              .FirstOrDefault(d => d.IDDevice == dev.IDDevice);
                 if (DateTime.Now - lastdata?.HistDataDate >= TimeSpan.FromMilliseconds(dev.DeviceInterval * 2 + 1)) {
                     DeviceCommError(dev);
                 }
