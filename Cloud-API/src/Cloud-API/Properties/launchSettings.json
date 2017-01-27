@@ -10,7 +10,7 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchUrl": "help",
+      "launchUrl": "api/help",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

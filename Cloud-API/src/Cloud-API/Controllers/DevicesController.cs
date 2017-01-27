@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Cloud_API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace Cloud_API.Controllers {
     /// API entry point to manage logic Devices
     /// </summary>
     [Route("api/[controller]")]
+    [Authorize]
     public class devicesController : Controller {
         private readonly DatabaseContext db;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();

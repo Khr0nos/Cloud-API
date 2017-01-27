@@ -28,9 +28,15 @@ namespace Cloud_API {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             // Add framework services.
-            //services.AddRouting();
             services.AddDbContext<DatabaseContext>(
                 opt => opt.UseSqlServer(Configuration.GetConnectionString("Azure")));
+
+            //services.AddDbContext<IdentityContext>(
+            //    opt => opt.UseSqlServer(Configuration.GetConnectionString("AzureAuth")));
+            //services.AddIdentity<APIUser, APIRole>()
+            //    .AddEntityFrameworkStores<IdentityContext>()
+            //    .AddDefaultTokenProviders();
+            //services.Configure<MvcOptions>(opt => opt.Filters.Add(new RequireHttpsAttribute()));
             services.AddMvc()
                 .AddXmlSerializerFormatters();
 
