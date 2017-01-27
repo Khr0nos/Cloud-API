@@ -31,11 +31,6 @@ namespace Cloud_API {
             services.AddDbContext<DatabaseContext>(
                 opt => opt.UseSqlServer(Configuration.GetConnectionString("Azure")));
 
-            //services.AddDbContext<IdentityContext>(
-            //    opt => opt.UseSqlServer(Configuration.GetConnectionString("AzureAuth")));
-            //services.AddIdentity<APIUser, APIRole>()
-            //    .AddEntityFrameworkStores<IdentityContext>()
-            //    .AddDefaultTokenProviders();
             //services.Configure<MvcOptions>(opt => opt.Filters.Add(new RequireHttpsAttribute()));
             services.AddMvc()
                 .AddXmlSerializerFormatters();
@@ -67,6 +62,12 @@ namespace Cloud_API {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+
+            var options = new JwtBearerOptions {
+                Audience = Configuration["Auth0:ApiIdentifier"],
+                Authority = $"https://{Configuration["Auth0:Domain"]}/"
+            };
+            app.UseJwtBearerAuthentication(options);
             
             env.ConfigureNLog("nlog.config");
             app.AddNLogWeb();
