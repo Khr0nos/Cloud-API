@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Cloud_API.Models;
+using CloudAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
@@ -11,14 +11,21 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Cloud_API.Controllers {
+namespace CloudAPI.Controllers {
     /// <summary>
-    /// API entry point to manage logic Devices
+    /// API entry point to manage logic Devices. Devices controller of the API
     /// </summary>
+    /// <remarks>This controllers returns response data formatted in JSON as default</remarks>
     [Route("api/[controller]")]
     [Authorize]
     public class devicesController : Controller {
+        /// <summary>
+        /// Represents the connection with the underlying database. Uses EntityFrameworkCore
+        /// </summary>
         private readonly DatabaseContext db;
+        /// <summary>
+        /// Provides a logging interface for this controller of the API
+        /// </summary>
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public devicesController(DatabaseContext context) {
@@ -31,7 +38,7 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <remarks>Returns a JSON array of Devices</remarks>
         /// <returns>Devices Data Collection</returns>
-        /// <response code="200">Returns all Devices items</response>
+        // <response code="200">Returns all Devices items</response>
         [HttpGet]
         [ProducesResponseType(typeof(IList<Devices>), 200)]
         public IActionResult Get() {
@@ -46,8 +53,8 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <param name="id">Device identifier</param>
         /// <returns>Devices</returns>
-        /// <response code="200">Returns selected Device</response>
-        /// <response code="404">Device not found</response>
+        // <response code="200">Returns selected Device</response>
+        // <response code="404">Device not found</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Devices), 200)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -64,9 +71,9 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <param name="nou">new logic Device definition to be added</param>
         /// <returns></returns>
-        /// <response code="201">Returns newly created item</response>
-        /// <response code="400">Data error</response>
-        /// <response code="409">Conflict, already existing item</response>
+        // <response code="201">Returns newly created item</response>
+        // <response code="400">Data error</response>
+        // <response code="409">Conflict, already existing item</response>
         [HttpPost]
         [ProducesResponseType(typeof(HistoricData), 201)]
         [ProducesResponseType(typeof(JObject), 400)]
@@ -111,9 +118,9 @@ namespace Cloud_API.Controllers {
         /// <param name="id">Device identifier</param>
         /// <param name="nou">Device to be updated</param>
         /// <returns></returns>
-        /// <response code="204">Device updated</response>
-        /// <response code="400">Data error</response>
-        /// <response code="404">Device not found</response>
+        // <response code="204">Device updated</response>
+        // <response code="400">Data error</response>
+        // <response code="404">Device not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -149,10 +156,10 @@ namespace Cloud_API.Controllers {
         /// <param name="id">Device identifier</param>
         /// <param name="patch">Device updated information</param>
         /// <returns></returns>
-        /// <response code="204">Device updated</response>
-        /// <response code="400">Data error</response>
-        /// <response code="404">Device not found</response>
-        /// <response code="403">Update not allowed</response>
+        // <response code="204">Device updated</response>
+        // <response code="400">Data error</response>
+        // <response code="404">Device not found</response>
+        // <response code="403">Update not allowed</response>
         [HttpPatch("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -201,9 +208,9 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <param name="id">Device identifier</param>
         /// <returns></returns>
-        /// <response code="200">Device deleted</response>
-        /// <response code="400">Data error</response>
-        /// <response code="404">Device not found</response>
+        // <response code="200">Device deleted</response>
+        // <response code="400">Data error</response>
+        // <response code="404">Device not found</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(HistoricData), 200)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -252,7 +259,10 @@ namespace Cloud_API.Controllers {
         #endregion
 
         #region Overrides of Controller
-
+        /// <summary>
+        /// Releases all resources used by the controller
+        /// </summary>
+        /// <param name="disposing">Indicates if the database context should be disposed as well</param>
         protected override void Dispose(bool disposing) {
             if (disposing) db.Dispose();
             base.Dispose(disposing);

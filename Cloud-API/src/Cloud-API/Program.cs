@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Cloud_API {
+namespace CloudAPI {
     public class Program {
         public static void Main(string[] args) {
             var host = new WebHostBuilder()

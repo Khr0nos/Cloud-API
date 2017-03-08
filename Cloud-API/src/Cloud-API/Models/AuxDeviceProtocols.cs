@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cloud_API.Models {
+namespace CloudAPI.Models {
     public partial class AuxDeviceProtocols {
         public AuxDeviceProtocols() {
             Devices = new HashSet<Devices>();

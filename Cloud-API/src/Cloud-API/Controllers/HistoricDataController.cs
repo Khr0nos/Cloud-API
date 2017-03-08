@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Cloud_API.Models;
+using CloudAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +10,27 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Cloud_API.Controllers {
+namespace CloudAPI.Controllers {
     /// <summary>
-    /// API entry point to manage Historic Data
+    /// API entry point to manage Historic Data. Data controller of the API
     /// </summary>
+    /// <remarks>This controllers returns response data formatted in JSON as default</remarks>
     [Route("api/[controller]")]
     public class historicdataController : Controller {
+        /// <summary>
+        /// Represents the connection with the underlying database. Uses EntityFrameworkCore
+        /// </summary>
         private readonly DatabaseContext db;
+        /// <summary>
+        /// Provides a logging interface for this controller of the API
+        /// </summary>
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// Default constructor of the controller
+        /// </summary>
+        /// <remarks>This constructor shouldn't be used directly on code. Called by the runtime</remarks>
+        /// <param name="context">Context connection of the database</param>
         public historicdataController(DatabaseContext context) {
             db = context;
         }
@@ -28,8 +40,20 @@ namespace Cloud_API.Controllers {
         /// Gets all HistoricData Values
         /// </summary>
         /// <remarks>Returns a JSON array of Historic Data items</remarks>
-        /// <returns>Historic Data Collection</returns>
-        /// <response code="200">Returns all Historic Data items</response>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>200 OK</b></term>
+        /// <term>Historic Data Collection</term>
+        /// </item>
+        /// </list>
+        /// </returns>
+        // <response code="200">Returns all Historic Data items</response>
         [HttpGet]
         [ProducesResponseType(typeof(IList<HistoricData>), 200)]
         public IActionResult Get() {
@@ -43,9 +67,25 @@ namespace Cloud_API.Controllers {
         /// Gets specific HistoricData
         /// </summary>
         /// <param name="id">HistoricData identifier</param>
-        /// <returns>Historic Data</returns>
-        /// <response code="200">Returns selected Historic Data item</response>
-        /// <response code="404">Historic Data item not found</response>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>200 OK</b></term>
+        /// <term>Historic Data</term>
+        /// </item>
+        /// <item>
+        /// <term><b>404 Not Found</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
+        // <response code="200">Returns selected Historic Data item</response>
+        // <response code="404">Historic Data item not found</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(HistoricData),200)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -61,10 +101,30 @@ namespace Cloud_API.Controllers {
         /// Adds new HistoricData
         /// </summary>
         /// <param name="nou">new HistoricData to be added</param>
-        /// <returns></returns>
-        /// <response code="201">Returns newly created item</response>
-        /// <response code="400">Data error</response>
-        /// <response code="409">Conflict, already existing item</response>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>201 Created</b></term>
+        /// <term>Newly created Data</term>
+        /// </item>
+        /// <item>
+        /// <term><b>400 Bad Request</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>409 Conflict</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
+        // <response code="201">Returns newly created item</response>
+        // <response code="400">Data error</response>
+        // <response code="409">Conflict, already existing item</response>
         [HttpPost]
         [ProducesResponseType(typeof(JObject), 201)]
         [ProducesResponseType(typeof(JObject), 400)]
@@ -119,10 +179,30 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <param name="id">HistoricData identifier</param>
         /// <param name="nou">HistoricData to be updated</param>
-        /// <returns></returns>
-        /// <response code="204">Historic Data updated</response>
-        /// <response code="400">Data error</response>
-        /// <response code="404">Historic Data item not found</response>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>204 No Content</b></term>
+        /// <term>Nothing</term>
+        /// </item>
+        /// <item>
+        /// <term><b>400 Bad Request</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>404 Not Found</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
+        // <response code="204">Historic Data updated</response>
+        // <response code="400">Data error</response>
+        // <response code="404">Historic Data item not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -157,11 +237,31 @@ namespace Cloud_API.Controllers {
         /// </summary>
         /// <param name="id">HistoricData identifier</param>
         /// <param name="patch">HistoricData updated information</param>
-        /// <returns></returns>
-        /// <response code="204">HistoricData updated</response>
-        /// <response code="400">Data error</response>
-        /// <response code="404">HistoricData not found</response>
-        /// <response code="403">Update not allowed</response>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>204 No Content</b></term>
+        /// <term>Nothing</term>
+        /// </item>
+        /// <item>
+        /// <term><b>400 Bad Request</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>409 Conflict</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
+        // <response code="204">HistoricData updated</response>
+        // <response code="400">Data error</response>
+        // <response code="404">HistoricData not found</response>
+        // <response code="403">Update not allowed</response>
         [HttpPatch("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -217,10 +317,30 @@ namespace Cloud_API.Controllers {
         /// Deletes specific HistoricData
         /// </summary>
         /// <param name="id">HistoricData identifier</param>
-        /// <returns></returns>
-        /// <response code="200">Historic Data item deleted</response>
-        /// <response code="404">Historic Data item not found</response>
-        /// <response code="400">Data error</response>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>200 OK</b></term>
+        /// <term>Deleted Data</term>
+        /// </item>
+        /// <item>
+        /// <term><b>400 Bad Request</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>404 Not Found</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
+        // <response code="200">Historic Data item deleted</response>
+        // <response code="404">Historic Data item not found</response>
+        // <response code="400">Data error</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(HistoricData), 200)]
         [ProducesResponseType(typeof(JObject), 404)]
@@ -245,11 +365,18 @@ namespace Cloud_API.Controllers {
         }
 
         #region Auxiliar
-
+        /// <summary>
+        /// Checks if some data already exists
+        /// </summary>
+        /// <param name="iddata">data identifier</param>
+        /// <returns>True if data already exists, False otherwise</returns>
         private bool DataExists(int iddata) {
             return db.HistoricData.Any(e => e.IdhistoricData == iddata);
         }
-
+        /// <summary>
+        /// Register device as connected
+        /// </summary>
+        /// <param name="device">device to be updated</param>
         private void ConnectDevice(Devices device) {
             logger.Info("Registering enabled device as connected");
             //device.DeviceConnected = true;
@@ -278,7 +405,12 @@ namespace Cloud_API.Controllers {
             }
             logger.Info("Enabled device registered as connected");
         }
-
+        /// <summary>
+        /// Update all HistoricData info
+        /// </summary>
+        /// <remarks>This method updates all data info except protected fields that shouldn't be modified</remarks>
+        /// <param name="old">Old HistoricData info to be updated</param>
+        /// <param name="nou">New HistoricData info</param>
         private void Update(HistoricData old, HistoricData nou) {
             var updated = db.HistoricData.Attach(old);
 
@@ -289,7 +421,11 @@ namespace Cloud_API.Controllers {
             updated.Entity.HistDataAck = nou.HistDataAck;
             updated.Entity.HistDataAux = nou.HistDataAux;
         }
-
+        /// <summary>
+        /// Validate Data for Patch requests
+        /// </summary>
+        /// <param name="op">Patch Data to be validated</param>
+        /// <returns></returns>
         private bool Validate(Operation<HistoricData> op) { //TODO validacio a la interficie de client, preferiblement
             if (string.Equals(op.path, "iddevice", StringComparison.OrdinalIgnoreCase)) {
                 if (op.value is int == false) return false;
@@ -311,7 +447,10 @@ namespace Cloud_API.Controllers {
         #endregion
 
         #region Overrides of Controller
-
+        /// <summary>
+        /// Releases all resources used by the controller
+        /// </summary>
+        /// <param name="disposing">Indicates if the database context should be disposed as well</param>
         protected override void Dispose(bool disposing) {
             if (disposing) db.Dispose();
             base.Dispose(disposing);

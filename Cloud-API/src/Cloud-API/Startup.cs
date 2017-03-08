@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Cloud_API.Models;
+using CloudAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,8 +12,15 @@ using NLog.Extensions.Logging;
 using NLog.Web;
 using Swashbuckle.Swagger.Model;
 
-namespace Cloud_API {
+namespace CloudAPI {
+    /// <summary>
+    /// Startup class. Provides startup configuration for the API
+    /// </summary>
     public class Startup {
+        /// <summary>
+        /// Startup constructor
+        /// </summary>
+        /// <param name="env">Provides information about the web hosting environment</param>
         public Startup(IHostingEnvironment env) {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -26,6 +33,10 @@ namespace Cloud_API {
         private IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Method called by the runtime on startup. Used for configuration of framework services including database connections, formatters, among others 
+        /// </summary>
+        /// <param name="services">Collection provided for defining framework services</param>
         public void ConfigureServices(IServiceCollection services) {
             // Add framework services.
             services.AddDbContext<DatabaseContext>(
@@ -54,6 +65,12 @@ namespace Cloud_API {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Method called by the runtime on startup. Used for configuring the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">Provides mechanisms to configure the pipeline</param>
+        /// <param name="env">Provides information about the web hosting environment</param>
+        /// <param name="loggerFactory">Provides configuration for the logging system of the API</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) {
             loggerFactory.AddNLog();
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));

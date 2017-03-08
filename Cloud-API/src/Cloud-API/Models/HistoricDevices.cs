@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cloud_API.Models {
+namespace CloudAPI.Models {
     public partial class HistoricDevices {
         [Required]
         public int IdhistoricDevices { get; set; }

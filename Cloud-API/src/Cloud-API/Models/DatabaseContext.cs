@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Cloud_API.Models {
+namespace CloudAPI.Models {
     public partial class DatabaseContext : DbContext {
         public virtual DbSet<AuxDataType> AuxDataType { get; set; }
         public virtual DbSet<AuxDeviceActions> AuxDeviceActions { get; set; }
