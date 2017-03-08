@@ -18,7 +18,7 @@
     "Cloud_API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/swagger/ui",
+      "launchUrl": "http://localhost:5000/api/help",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
