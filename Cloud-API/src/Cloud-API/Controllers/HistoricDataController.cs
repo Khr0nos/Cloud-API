@@ -447,10 +447,10 @@ namespace CloudAPI.Controllers {
         #endregion
 
         #region Overrides of Controller
-        /// <summary>
-        /// Releases all resources used by the controller
-        /// </summary>
-        /// <param name="disposing">Indicates if the database context should be disposed as well</param>
+        // <summary>
+        // Releases all resources used by the controller
+        // </summary>
+        // <param name="disposing">Indicates if the database context should be disposed as well</param>
         protected override void Dispose(bool disposing) {
             if (disposing) db.Dispose();
             base.Dispose(disposing);
