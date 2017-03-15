@@ -253,7 +253,11 @@ namespace CloudAPI.Controllers {
         /// <term>Error information</term>
         /// </item>
         /// <item>
-        /// <term><b>409 Conflict</b></term>
+        /// <term><b>404 Not Found</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>403 Forbidden</b></term>
         /// <term>Error information</term>
         /// </item>
         /// </list>
@@ -406,11 +410,11 @@ namespace CloudAPI.Controllers {
             logger.Info("Enabled device registered as connected");
         }
         /// <summary>
-        /// Update all HistoricData info
+        /// Update all HistoricData information
         /// </summary>
-        /// <remarks>This method updates all data info except protected fields that shouldn't be modified</remarks>
-        /// <param name="old">Old HistoricData info to be updated</param>
-        /// <param name="nou">New HistoricData info</param>
+        /// <remarks>This method updates all data information except protected fields that shouldn't be modified</remarks>
+        /// <param name="old">Old HistoricData information to be updated</param>
+        /// <param name="nou">New HistoricData information</param>
         private void Update(HistoricData old, HistoricData nou) {
             var updated = db.HistoricData.Attach(old);
 

@@ -37,7 +37,19 @@ namespace CloudAPI.Controllers {
         /// Gets all devices definitions
         /// </summary>
         /// <remarks>Returns a JSON array of Devices</remarks>
-        /// <returns>Devices Data Collection</returns>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>200 OK</b></term>
+        /// <term>Devices Data Collection</term>
+        /// </item>
+        /// </list>
+        /// </returns>
         // <response code="200">Returns all Devices items</response>
         [HttpGet]
         [ProducesResponseType(typeof(IList<Devices>), 200)]
@@ -49,10 +61,26 @@ namespace CloudAPI.Controllers {
 
         // GET api/devices/5
         /// <summary>
-        /// Gets specific Device
+        /// Gets specific Device definition
         /// </summary>
         /// <param name="id">Device identifier</param>
-        /// <returns>Devices</returns>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>200 OK</b></term>
+        /// <term>Selected Device information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>404 Not Found</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
         // <response code="200">Returns selected Device</response>
         // <response code="404">Device not found</response>
         [HttpGet("{id}")]
@@ -67,10 +95,30 @@ namespace CloudAPI.Controllers {
 
         // POST api/devices
         /// <summary>
-        /// Adds new Device
+        /// Adds new Device definition
         /// </summary>
         /// <param name="nou">new logic Device definition to be added</param>
-        /// <returns></returns>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>201 Created</b></term>
+        /// <term>Newly created Device</term>
+        /// </item>
+        /// <item>
+        /// <term><b>400 Bad Request</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>409 Conflict</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
         // <response code="201">Returns newly created item</response>
         // <response code="400">Data error</response>
         // <response code="409">Conflict, already existing item</response>
@@ -113,11 +161,31 @@ namespace CloudAPI.Controllers {
 
         // PUT api/devices/5
         /// <summary>
-        /// Updates existing Device
+        /// Updates existing Device definition
         /// </summary>
         /// <param name="id">Device identifier</param>
-        /// <param name="nou">Device to be updated</param>
-        /// <returns></returns>
+        /// <param name="nou">Device definition to be updated</param>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>204 No Content</b></term>
+        /// <term>Nothing</term>
+        /// </item>
+        /// <item>
+        /// <term><b>400 Bad Request</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>404 Not Found</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
         // <response code="204">Device updated</response>
         // <response code="400">Data error</response>
         // <response code="404">Device not found</response>
@@ -151,11 +219,35 @@ namespace CloudAPI.Controllers {
 
         // PATCH api/devices/5
         /// <summary>
-        /// Updates some Device information
+        /// Updates some Device definition information
         /// </summary>
         /// <param name="id">Device identifier</param>
         /// <param name="patch">Device updated information</param>
-        /// <returns></returns>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>204 No Content</b></term>
+        /// <term>Nothing</term>
+        /// </item>
+        /// <item>
+        /// <term><b>400 Bad Request</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>404 Not Found</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>403 Forbidden</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
         // <response code="204">Device updated</response>
         // <response code="400">Data error</response>
         // <response code="404">Device not found</response>
@@ -207,7 +299,27 @@ namespace CloudAPI.Controllers {
         /// Deletes specific Device
         /// </summary>
         /// <param name="id">Device identifier</param>
-        /// <returns></returns>
+        /// <returns>
+        /// One of the following cases
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Response code</term>
+        /// <term>Returned value</term>
+        /// </listheader>
+        /// <item>
+        /// <term><b>200 OK</b></term>
+        /// <term>Deleted Device</term>
+        /// </item>
+        /// <item>
+        /// <term><b>400 Bad Request</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// <item>
+        /// <term><b>404 Not Found</b></term>
+        /// <term>Error information</term>
+        /// </item>
+        /// </list>
+        /// </returns>
         // <response code="200">Device deleted</response>
         // <response code="400">Data error</response>
         // <response code="404">Device not found</response>
@@ -235,11 +347,20 @@ namespace CloudAPI.Controllers {
         }
 
         #region Auxiliar
-
+        /// <summary>
+        /// Check if some Device definition exists
+        /// </summary>
+        /// <param name="iddevice">Device identifier</param>
+        /// <returns>True if the device definition already exists, False otherwise</returns>
         private bool DeviceExists(int iddevice) {
             return db.Devices.Any(e => e.Iddevice == iddevice);
         }
-
+        /// <summary>
+        /// Update all Device definition information
+        /// </summary>
+        /// <remarks>This method updates all device information except protected fields that shouldn't be modified</remarks>
+        /// <param name="old">Old Device information to be updated</param>
+        /// <param name="nou">New Device information</param>
         private void Update(Devices old, Devices nou) {
             var updated = db.Devices.Attach(old);
             
