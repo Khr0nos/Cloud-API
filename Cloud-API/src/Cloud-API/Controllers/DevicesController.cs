@@ -123,7 +123,7 @@ namespace CloudAPI.Controllers {
         // <response code="400">Data error</response>
         // <response code="409">Conflict, already existing item</response>
         [HttpPost]
-        [ProducesResponseType(typeof(HistoricData), 201)]
+        [ProducesResponseType(typeof(Devices), 201)]
         [ProducesResponseType(typeof(JObject), 400)]
         [ProducesResponseType(typeof(JObject), 409)]
         public IActionResult Post([FromBody] Devices nou) {
@@ -324,7 +324,7 @@ namespace CloudAPI.Controllers {
         // <response code="400">Data error</response>
         // <response code="404">Device not found</response>
         [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(HistoricData), 200)]
+        [ProducesResponseType(typeof(Devices), 200)]
         [ProducesResponseType(typeof(JObject), 404)]
         [ProducesResponseType(typeof(JObject), 400)]
         public IActionResult Delete(int id) {
