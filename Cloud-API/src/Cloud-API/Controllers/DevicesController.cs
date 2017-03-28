@@ -20,7 +20,7 @@ namespace CloudAPI.Controllers {
     [Authorize]
     public class devicesController : Controller {
         /// <summary>
-        /// Represents the connection with the underlying database. Uses EntityFrameworkCore
+        /// Represents the connection with the underlying database. Uses Entity Framework Core
         /// </summary>
         private readonly DatabaseContext db;
         /// <summary>

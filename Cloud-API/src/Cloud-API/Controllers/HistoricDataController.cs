@@ -18,7 +18,7 @@ namespace CloudAPI.Controllers {
     [Route("api/[controller]")]
     public class historicdataController : Controller {
         /// <summary>
-        /// Represents the connection with the underlying database. Uses EntityFrameworkCore
+        /// Represents the connection with the underlying database. Uses Entity Framework Core
         /// </summary>
         private readonly DatabaseContext db;
         /// <summary>
