@@ -2,13 +2,37 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CloudAPI.Models {
+    /// <summary>
+    /// Model class for database management
+    /// </summary>
     public partial class DatabaseContext : DbContext {
+        /// <summary>
+        /// Provides AuxDataType table management
+        /// </summary>
         public virtual DbSet<AuxDataType> AuxDataType { get; set; }
+        /// <summary>
+        /// Provides AuxDeviceActions table management
+        /// </summary>
         public virtual DbSet<AuxDeviceActions> AuxDeviceActions { get; set; }
+        /// <summary>
+        /// Provides AuxDeviceProtocols table management
+        /// </summary>
         public virtual DbSet<AuxDeviceProtocols> AuxDeviceProtocols { get; set; }
+        /// <summary>
+        /// Provides AuxDeviceType table management
+        /// </summary>
         public virtual DbSet<AuxDeviceType> AuxDeviceType { get; set; }
+        /// <summary>
+        /// Provides Devices table management
+        /// </summary>
         public virtual DbSet<Devices> Devices { get; set; }
+        /// <summary>
+        /// Provides HistoricData table management
+        /// </summary>
         public virtual DbSet<HistoricData> HistoricData { get; set; }
+        /// <summary>
+        /// Provides HistoricDevices table management
+        /// </summary>
         public virtual DbSet<HistoricDevices> HistoricDevices { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) {}

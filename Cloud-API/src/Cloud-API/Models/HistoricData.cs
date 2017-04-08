@@ -13,8 +13,8 @@ namespace CloudAPI.Models {
         public int IdhistoricData { get; set; }
 
         /// <summary>
-        /// Device identifier
-        /// <remarks>This identifier marks which device sent this data</remarks>
+        /// Device identifier.
+        /// This identifier marks which device sent this data
         /// </summary>
         [Required(ErrorMessage = "Device id missing")]
         public int Iddevice { get; set; }
@@ -43,14 +43,14 @@ namespace CloudAPI.Models {
         public bool HistDataToDevice { get; set; } = false;
 
         /// <summary>
-        /// Boolean to indicate confirmation from the device
-        /// <remarks>This field marks if some data sent to the device has been confirmed</remarks>
+        /// Boolean to indicate confirmation from the device.
+        /// This field marks if some data sent to the device has been confirmed
         /// </summary>
         [DefaultValue(false)]
         public bool HistDataAck { get; set; } = false;
 
         /// <summary>
-        /// Auxiliar field
+        /// Auxiliar field. Optional
         /// </summary>
         [DefaultValue(null)]
         public string HistDataAux { get; set; } = null;
